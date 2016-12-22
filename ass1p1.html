@@ -24,9 +24,19 @@
 				font-family: 'Nunito Sans', sans-serif;
 				text-align: center
 			}
-			p{
+			p, li{
 				font-family: 'Nunito Sans', sans-serif;
 				text-align: justify
+			}
+			figure img {
+			  width: 100%;
+			  height: auto;
+		    }
+		    figure figcaption {
+				font-family: 'Nunito Sans', sans-serif;
+				font-weight: bold;
+				border: 1px solid red;
+				text-align: center;
 			}
 		</style>
 		
@@ -237,7 +247,7 @@
 		
 		<p>
 			<tab1></tab1>Since the main purpose of the dataset is to find correlations between students with their alcohol consumption patterns, the most conspicuous relationship
-			would be the relationship between their grades and absences from school with respect to their workday and weekend alcohol consumption. The traditional
+			would be the <b>relationship between their grades and absences from school with respect to their workday and weekend alcohol consumption</b>. The traditional
 			consensus is that students who consume alcohol at high levels tend to skip more classes and perform worse in their studies, thus, resulting in lower
 			grades. However, a research conducted in the United States by Balsa (2011), showed that increases in levels of alcohol consumption only resulted in small
 			reductions of GPA. We shall see which consensus holds true. Four columns play a major role in this which are: column 27 (workday alcohol consumption)
@@ -253,25 +263,28 @@
 		</p>
 		<p>
 			<tab1></tab1>As we all know, human relationships play a major role in people's lives. It can develop a plethora of emotions in oneself, may it be a positive or negative
-			emotion. It is a usual train of thought that those who have a bad relationship with their family members will be stressed and unhappy which results in them
-			drinking alcohol for consolation. We could check to see if that hypothesis has a concrete basis by using column 24 (famrel), column 27 (workday alcohol
+			emotion. It is a usual train of thought that those who have a <b>bad relationship with their family members will be stressed and unhappy which results in them
+			drinking alcohol for consolation.</b> We could check to see if that hypothesis has a concrete basis by using column 24 (famrel), column 27 (workday alcohol
 			consumption) and/or column 28 (weekend alcohol consumption). If the hypothesis holds true, we would expect to see an increasing level of alcohol
 			consumption (both column 27 and 28) when famrel has a low value. However, the assumption is that the alcohol consumption is high because the student's
 			relationship with his/her family has a low value. Correlation does not imply causation. This may not hold true because it is a possibility that the
-			student's relationship with his/her family is low because of their high level of alcohol consumption.
+			student's relationship with his/her family is low because of their high level of alcohol consumption. <b>For the data exploratory exercise, we choose to examine two columns; 
+			workday alcohol consumption and their family relationship.</b>
 		</p>
 		<p>
-			<tab1></tab1>Besides family relationships, we can also try to find if there is a relationship between being single and consuming high levels of alcohol. To do so, we
+			<tab1></tab1>Besides family relationships, we can also try to find if there is a <b>relationship between being single and consuming high levels of alcohol.</b> To do so, we
 			need to take column 23 (romantic), column 27 (workday alcohol consumption) and/or column 28 (weekend alcohol consumption) into consideration. Column 23
 			(romantic), only gives information on whether or not the student has a partner. It does not state the level of intimacy between them. A research conducted
 			by Dinescu et. al. (2016), studied the relationship between married couples with their single counterparts and found out that if partners are more
 			intimate, they will drink less. Assuming the romantic relationship in our dataset is of an intimate level, we can find out if this statement holds true.
+			<b>For the data exploratory exercise, we choose to examine two columns; workday alcohol consumption and their relationship status.</b>
 		</p>
 		<p>
-			<tab1></tab1>Last but not least, we can also obtain insights on health issues and drinking alcohol. In general, we would assume that people who are not healthy, will
+			<tab1></tab1>Last but not least, we can also obtain insights on <b>health issues and drinking alcohol.</b> In general, we would assume that people who are not healthy, will
 			avoid drinking in order to prevent their health from further deterioration. To obtain insights on this, we could refer to column 29 (health), column 27
 			(workday alcohol consumption) and/or column 28 (weekend alcohol consumption). We would think that if the value for health is lower, the value for their
-			workday and/or weekend alcohol consumption would also be lower.
+			workday and/or weekend alcohol consumption would also be lower. <b>For the data exploratory exercise, we choose to examine two columns; workday alcohol consumption 
+			and their health.</b>
 		</p>
 		
 		</br>
@@ -280,9 +293,59 @@
 			C. What type of data mining technique would be relevant? 
 		</h1>
 		
+		<p>
+			<tab1></tab1>The data mining technique we think is suitable is classification. 
+			For a student to pass the subject, there are a couple of factors that could be correlated with the outcome. We could take into consideration the 
+			following: 
+			<ul>
+				<li>the amount of time a student studies (studytime, column 14)</li>
+				<li>does the student join any extra paid classes (paid, column 18)</li>
+				<li>does the student participate in any extra co-curricular activities (activities, column 19)</li>
+				<li>if the student is involved in any romantic relationship (romantic, column 23)</li>
+				<li>how is the student's family relationship quality (famrel, column 24)</li>
+				<li>the tendency of the student to go out with friends (goout, column 26)</li>
+				<li>weekday alcohol consumption (Dalc, column 27)</li>
+				<li>weekend alcohol consumption (Walc, column 28)</li>
+			</ul>
+			
+			<p>Figure 1 illustrates the high-level description of our classification.</p>
+			
+			<figure>
+				<img src = "classification.jpg" alt = "Classification Image">
+				<figcaption>Figure 1: Using GStatus as the class</figcaption>
+			</figure>
+		</p>
+		
+		<p>
+			<tab1></tab1>Classification data mining technique is best used in situation because we can build a classification model to 
+			predict the whether or not a student will pass the subject based on the various factors. We can use studytime (column 14), paid (column 18), 
+			activites (column 19), romantic (column 23), famrel (column 24), goout (column 26), Dalc (column 27), Walc (column 28) 
+			as the attributes and GStatus as the class for the training set to predict the class GStatus in the test set and validate the model. 
+		</p>
+		
+		<p>
+			<tab1></tab1><b>GStatus is derived from the final period grade, (G3, column 33)</b> where according to EuroEducation.net (n.d.), 
+			the passing marks for a student in Portugal would be 10 out of 20. The reason for this change is because it is easier to classify a student's 
+			result as pass/fail than a discrete numeric number. This would help the classification model to more accurately predict the class GStatus
+			because it would be less accurate for the classification model to predict a numeric value ranging from 0-20.
+		</p>
 		</br>
 		
-		<p margin-right = "3em"><a href = "ass1p2.html"> Assignment 1 - Part 2</a></p>
+		<h1>
+			D. Describe data quality issues, and be specific. Identify which attribute (column) has issues, or if the structure of the data has problems.
+		</h1>
+		
+		</br>
+		
+		<h1>References</h1>
+		<ol>
+			<li>Balsa, A. I., Giuliano, L. M., & French, M. T. (2011). The effects of alcohol use on academic achievement in high school. Economics of Education Review, 30(1), 1-15. </li>
+			<li>Dinescu, D., Turkheimer E., Beam, C.R., Horn, E.E., Duncan, G., Emery, R.E. (2016). Is marriage a buzzkill? A twin study of marital status and alcohol consumption. Journal of Family Psychology, Vol 30(6), Sep 2016, 698-707.</li>
+			<li>EuroEducation.net. (n.d.). EDUCATION SYSTEM IN PORTUGAL. Retrieved from http://www.euroeducation.net/prof/porco.htm</li>
+		</ol>
+		
+		<a href = "index.html" style = "float:left"> <p>Front Page</p></a>
+		<a href = "ass1p2.html" style = "float:right"> <p>Assignment 1 - Part 2 (Section E)</p></a>
 		
 	</body>
 	
