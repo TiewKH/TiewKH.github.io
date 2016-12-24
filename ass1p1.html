@@ -48,6 +48,16 @@
 		<header>
 			Assignment 1 - Part 1 - Report
 		</header>
+		
+		<h1>
+			Introduction
+		</h1>
+		<br/>
+		<p>
+			The dataset we chose is the Student Alcohol Consumption dataset by UCI Machine Learning which can be obtained 
+			at <a href = "https://www.kaggle.com/uciml/student-alcohol-consumption" target="_blank">Kaggle</a>.
+		</p>
+		<br/>
 		<h1>
 			A. Describe the dataset in your own words.
 		</h1>
@@ -63,178 +73,112 @@
 			courses of mathematics and Portuguese. The amount of mathematics students involved in the collection was 395, whereas 649 Portuguese Language students were
 			recorded to have participated. However, the data reveals that there was a total of 382 students that were in both datasets, this was evident in the exact
 			replication of data. The data collected, in locations such as Gabriel Pereira and Mousinho da Silveira, includes several values of pertinence. Examples of
-			such data are records of demographic information, grades, and alcohol consumption. The dataset which we will be exploring will be the dataset containing
-			information about the students from the mathematics course only.
+			such data are records of demographic information, grades, and alcohol consumption. <b>The dataset which we will be exploring will be the dataset containing
+			information about the students from the mathematics course only.</b>
 		</p>
 		<p>
-			<tab1></tab1>The datasets have a total of 33 attribute columns of which we could do some editing in order to make the data easier to work with. This will be attempted
-			in section E alongside some exploratory data analysis exercises. The columns and how they are recorded are as listed below:
+			<tab1></tab1>The datasets have a total of 33 attribute columns of which we could do some column selection based on certain parameters. This will be attempted
+			in section E for our exploratory data analysis. The columns and how they are recorded are as listed below:
 		</p>
 		<ol>
 			<li >
-				<p >
-					school - GP/MS for the student's school
-				</p>
+				school - GP/MS for the student's school
 			</li>
 			<li >
-				<p >
-					sex - M/F for gender
-				</p>
+				sex - M/F for gender
 			</li>
 			<li >
-				<p >
-					age - 15-22 for the student's age
-				</p>
+				age - 15-22 for the student's age
 			</li>
 			<li >
-				<p >
-					address - U/R for urban or rural respectively
-				</p>
+				address - U/R for urban or rural respectively
 			</li>
 			<li >
-				<p >
-					famsize - LE3/GT3 for less than or greater than three family members
-				</p>
+				famsize - LE3/GT3 for less than or greater than three family members
+			</li>
+			<li>
+				Pstatus - T/A for living together or apart from parents, respectively
 			</li>
 			<li >
-				<p >
-					Pstatus - T/A for living together or apart from parents, respectively
-				</p>
+				Medu - 0(none) / 1(primary-4th grade) / 2(5th - 9th grade) / 3(secondary) / 4(higher) for mother's education
 			</li>
 			<li >
-				<p >
-					Medu - 0(none) / 1(primary-4th grade) / 2(5th-9thgrade) / 3(secondary) / 4(higher) for mother's education
-				</p>
+				Fedu - 0(none) / 1(primary-4th grade) / 2(5th - 9th grade) / 3(secondary) / 4(higher) for father's education
 			</li>
 			<li >
-				<p >
-					Fedu - 0(none) / 1(primary-4th grade) / 2(5th-9thgrade) / 3(secondary) / 4(higher) for father's education
-				</p>
+				Mjob - 'teacher', 'health' care related, civil 'services', 'at_home' or 'other' for the student's mother's job
 			</li>
 			<li >
-				<p >
-					Mjob - 'teacher', 'health' care related, civil 'services', 'at_home' or 'other' for the student's mother's job
-				</p>
+				Fjob - 'teacher', 'health' care related, civil 'services', 'at_home' or 'other' for the student's father's job
 			</li>
 			<li >
-				<p >
-					Fjob - 'teacher', 'health' care related, civil 'services', 'at_home' or 'other' for the student's father's job
-				</p>
+				reason - close to 'home', school 'reputation', 'course' preference or 'other' for the choice of school
 			</li>
 			<li >
-				<p >
-					reason - close to 'home', school 'reputation', 'course' preference or 'other' for the choice of school
-				</p>
+				guardian - mother/father/other as the student's guardian
 			</li>
 			<li >
-				<p >
-					guardian - mother/father/other as the student's guardian
-				</p>
+				traveltime - 1(&lt;15mins) / 2(15 - 30 mins) / 3(30 mins - 1 hr) / 4(&gt;1hr) for time from home to school
 			</li>
 			<li >
-				<p >
-					traveltime - 1(&lt;15mins) / 2(15-30mins) / 3(30mins-1hr) / 4(&gt;1hr) for time from home to school
-				</p>
+				studytime - 1(&lt;2hrs) / 2(2 - 5hrs) / 3(5 - 10hrs) / 4(&gt;10hrs) for weekly study time
 			</li>
 			<li >
-				<p >
-					studytime - 1(&lt;2hrs)/2(2-5hrs)/3(5-10hrs)/4(&gt;10hrs) for weekly study time
-				</p>
+				failures - 1-3/4 for number of class failures(if more than 3 than record 4)
 			</li>
 			<li >
-				<p >
-					failures - 1-3/4 for number of class failures(if more than 3 than record 4)
-				</p>
+				schoolsup - yes/no for extra educational support
 			</li>
 			<li >
-				<p >
-					schoolsup - yes/no for extra educational support
-				</p>
+				famsup - yes/no for family educational support
 			</li>
 			<li >
-				<p >
-					famsup - yes/no for family educational support
-				</p>
+				paid - yes/no for extra paid classes for Math or Portuguese
 			</li>
 			<li >
-				<p >
-					paid - yes/no for extra paid classes for Math or Portuguese
-				</p>
+				activities - yes/no for extra-curricular activities
 			</li>
 			<li >
-				<p >
-					activities - yes/no for extra-curricular activities
-				</p>
+				nursery - yes/no for whether attended nursery school
 			</li>
 			<li >
-				<p >
-					nursery - yes/no for whether attended nursery school
-				</p>
+				higher - yes/no for desire to continue studies
 			</li>
 			<li >
-				<p >
-					higher - yes/no for desire to continue studies
-				</p>
+				internet - yes/no for internet access at home
 			</li>
 			<li >
-				<p >
-					internet - yes/no for internet access at home
-				</p>
+				romantic - yes/no for relationship status
 			</li>
 			<li >
-				<p >
-					romantic - yes/no for relationship status
-				</p>
+				famrel - 1-5 scale on quality of family relationships
 			</li>
 			<li >
-				<p >
-					famrel - 1-5 scale on quality of family relationships
-				</p>
+				freetime - 1-5 scale on how much free time after school
 			</li>
 			<li >
-				<p >
-					freetime - 1-5 scale on how much free time after school
-				</p>
+				goout - 1-5 scale on how much student goes out with friends
 			</li>
 			<li >
-				<p >
-					goout - 1-5 scale on how much student goes out with friends
-				</p>
+				Dalc - 1-5 scale on how much alcohol consumed on weekdays
 			</li>
 			<li >
-				<p >
-					Dalc - 1-5 scale on how much alcohol consumed on weekdays
-				</p>
+				Walc - 1-5 scale on how much alcohol consumed on weekend
 			</li>
 			<li >
-				<p >
-					Walc - 1-5 scale on how much alcohol consumed on weekend
-				</p>
+				health - 1-5 scale on health condition
 			</li>
 			<li >
-				<p >
-					health - 1-5 scale on health condition
-				</p>
+				absences - 0-93 amount of absences from school
 			</li>
 			<li >
-				<p >
-					absences - 0-93 amount of absences from school
-				</p>
+				G1 - 0-20 for the first period grade
 			</li>
 			<li >
-				<p >
-					G1 - 0-20 for the first period grade
-				</p>
+				G2 - 0-20 for the second period grade
 			</li>
 			<li >
-				<p >
-					G2 - 0-20 for the second period grade
-				</p>
-			</li>
-			<li >
-				<p >
-					G3 - 0-20 for the final grade
-				</p>
+				G3 - 0-20 for the final grade
 			</li>
 		</ol>
 		<br/>
@@ -311,7 +255,7 @@
 			<p>Figure 1 illustrates the high-level description of our classification.</p>
 			
 			<figure>
-				<img src = "classification.jpg" alt = "Classification Image">
+				<img src = "classification.png" alt = "Classification Image">
 				<figcaption>Figure 1: Using GStatus as the class</figcaption>
 			</figure>
 		</p>
@@ -334,8 +278,38 @@
 		<h1>
 			D. Describe data quality issues, and be specific. Identify which attribute (column) has issues, or if the structure of the data has problems.
 		</h1>
-		
 		</br>
+		
+		<p>
+			<tab1></tab1>There are a few columns which we think could be further clarified or changed. They are:
+		</p>
+		
+		<ol>
+			<li><b>guardian (column 12)</b> - Currently, it is divided  into 3 levels which are "mother", "father" and "other". However the  part labelled "other"
+			should be a bit more specific as for the entries where people have placed "other". They should add factors of whether the student is an orphan or 
+			living with their closer relatives.</li>
+			
+			<li><b>schoolsup (column 16)</b> - The column name schoolsup with entries "yes" or "no" of which stands for extra educational support is a
+			little misleading and ambiguous as we do not know if it means the student is receiving extra educational support due to this grades/results or because
+			the student is from a unwealthy family and is receiving support in terms of food. If it is the latter, it will not have a big impact on grades compared
+			to the former. Instead, schoolsup should be replaced with a column named scholarship to indicate whether if a student is under the school
+			scholarship. The value for the attribute should be a simple binary answer such as yes/no.</li>
+			
+			<li><b>paid (column 18)</b> - This column is for students with extra paid classes within the course subject which only has yes or no option, it does 
+			not state how many paid classes they took. A proper amendment would be to ask how many extra paid classes they took in a week and have the values 
+			be of an numeric format.</li>
+			
+			<li><b>activities (column 19)</b> - This column is for extra-curricular activities that students have participated in and it only has a yes or no option.
+			There is no indication as to how many extra-curricular the students have taken. A proper way to go about this is to have the column ask how many 
+			extra-curricular activities they took in a week and have the values be of an numeric format.</li>
+			
+			<li><b>goout (column 26)</b> - This column is for the amount of time that the student spend to go out with his/her friends. The option given is to state how much 
+			they go out with friends (1 if very low and 5 if very high). This is not a proper measurement unit. It should have been recorded as how many times the student
+			go out with their friends in a week and the values should be in a numeric format. </li>
+		</ol>
+		</br>
+		
+		<p>Please proceed to <a href = "ass1p2.html"> Assignment 1 - Part 2 (Section E)</a> for the data exploratory exercise and preprocessing.</p>
 		
 		<h1>References</h1>
 		<ol>
@@ -345,7 +319,7 @@
 		</ol>
 		
 		<a href = "index.html" style = "float:left"> <p>Front Page</p></a>
-		<a href = "ass1p2.html" style = "float:right"> <p>Assignment 1 - Part 2 (Section E)</p></a>
+		
 		
 	</body>
 	
