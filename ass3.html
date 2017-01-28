@@ -502,6 +502,7 @@ confusionMatrix(predspp, dfNN.test$Occupancy)</code></pre>
 \]</span></p>
 <p>The reason Naive Bayes has the worst results is because it assumes independence between variables. This is not the case for our data set. As explained earlier, when the time of the day is 11 a.m., light intensity will be high eventhough the room is unoccupied. This would mean that the variables are dependent on each other and that they are not independent of one another. That is one of the reasons we can think of that makes Naive Bayes unsuitable for this classification task.</p>
 <p>On the other hand, our decision tree model and our ANN model performed very well with ANN having the slight edge over the decision tree. The reason ANN is not performing that much better compared to the decision tree may be the fact that we could not include Time as an argument for our ANN model. Perhaps if Time could have been included when building our ANN model, the results of our ANN model would be A LOT more accurate compared to the decision tree.</p>
+<p><a href="Assignment%203%20Script.R">The R Script for this assignment can be found here.</a></p>
 </div>
 
 
