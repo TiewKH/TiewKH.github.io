@@ -494,7 +494,7 @@ confusionMatrix(predspp, dfNN.test$Occupancy)</code></pre>
 <div id="explanation-on-their-performance" class="section level1">
 <h1>Explanation On Their Performance</h1>
 <p>First, let us define what is accuracy, sensitivity (True Positive Rate) and specificity (True Negative Rate).</p>
-<p>Accuracy is the simplest one which can be defined as the number of predictions that are correctly predicted.</p>
+<p>Accuracy is the simplest one which can be defined as the percentage of predictions that are correctly predicted.</p>
 <p>Sensitivity, also known as True Positive Rate (TPR) or Recall, can be defined as the proportion of positives (in our case when Occupancy = ‘Occupied’) that are correctly identified as such. In other words, from all the observations which are labelled as ‘Occupied’, how many observations did your model predict ‘Occupied’ correctly. Sensitivity can be calculated by the equation:</p>
 <p><span class="math display">\[
 \frac{True Positives}{True Positives + False Negatives}
@@ -504,8 +504,12 @@ confusionMatrix(predspp, dfNN.test$Occupancy)</code></pre>
 \frac{True Negatives}{True Negatives + False Positives}
 \]</span></p>
 <p>The reason Naive Bayes has the worst results is because it assumes independence between variables. This is not the case for our data set. As explained earlier, when the time of the day is 11 a.m., light intensity will be high eventhough the room is unoccupied. This would mean that the variables are dependent on each other and that they are not independent of one another. That is one of the reasons we can think of that makes Naive Bayes unsuitable for this classification task.</p>
-<p>On the other hand, our decision tree model and our ANN model performed very well with ANN having the slight edge over the decision tree. The reason ANN is not performing that much better compared to the decision tree may be the fact that we could not include Time as an argument for our ANN model. Perhaps if Time could have been included when building our ANN model, the results of our ANN model would be A LOT more accurate compared to the decision tree.</p>
-<p><a href="Assignment%203%20Script.R">The R Script for this assignment can be found here.</a></p>
+<p>On the other hand, our decision tree model and our ANN model performed very well with ANN having the slight edge over the decision tree. 
+The reason ANN is not performing that much better compared to the decision tree may be the fact that we could not include Time as an argument for 
+our ANN model. Perhaps if Time could have been included when building our ANN model, the results of our ANN model would be A LOT more accurate compared 
+to the decision tree. Besides that, we could also try to increase the number of hidden layers and number of hidden nodes in our ANN model in order to increase
+the model's accuracy. However, following Occam's Razor, we should not complexify our model as it is already has a very good accuracy. </p>
+<p><a href="Assignment%203%20Script.R">The R Script for this assignment can be found here.</a></p> 
 </div>
 
 
