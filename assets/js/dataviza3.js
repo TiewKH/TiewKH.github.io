@@ -14,7 +14,7 @@ function updateMap(color, data) {
     .call(fillMap, color, data);
     
   // update headline
-  d3.select("h2").text(headline + d3.select("#year").node().value);
+  d3.select("h3").text(headline + d3.select("#year").node().value);
 }
 
 function renderLegend(color, data) {
