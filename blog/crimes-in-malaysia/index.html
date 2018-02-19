@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Visualization of Total Accidents in Malaysia</title>
+
+    <!-- Open Graph Meta -->
+    <meta content="Tiew Kee Hui's Profile" property="og:site_name">
+    
+      <meta content="Visualization of Total Accidents in Malaysia" property="og:title">
+    
+    
+      <meta content="article" property="og:type">
+    
+    
+      <meta content="This choropleth map was done as part of fulfilling the Data Visualization course in Multimedia University." property="og:description">
+    
+    
+      <meta content="https://tiewkh.github.io//blog/crimes-in-malaysia/" property="og:url">
+    
+    
+      <meta content="2018-02-19T00:00:00+08:00" property="article:published_time">
+      <meta content="https://tiewkh.github.io//about/" property="article:author">
+    
+    
+      <meta content="https://tiewkh.github.io//assets/img/dinosaur.jpg" property="og:image">
+    
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+    
+      <meta name="twitter:title" content="Visualization of Total Accidents in Malaysia">
+    
+    
+      <meta name="twitter:url" content="https://tiewkh.github.io//blog/crimes-in-malaysia/">
+    
+    
+      <meta name="twitter:description" content="This choropleth map was done as part of fulfilling the Data Visualization course in Multimedia University.">
+    
+    
+      <meta name="twitter:image:src" content="https://tiewkh.github.io//assets/img/dinosaur.jpg">
+    
+
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+
+    <!-- Come and get me RSS readers -->
+    <link rel="alternate" type="application/rss+xml" title="Tiew Kee Hui's Profile" href="https://tiewkh.github.io//feed.xml" />
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie.css"><![endif]-->
+    <link rel="canonical" href="https://tiewkh.github.io//blog/crimes-in-malaysia/">
+
+    <!-- Modernizr -->
+    <script src="/assets/js/modernizr.custom.15390.js" type="text/javascript"></script>
+
+     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-113305033-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+ 
+</head>
+
+
+<body>
+
+    <div class="header">
+     <div class="container">
+         <h1 class="logo"><a href="/">Tiew Kee Hui's Profile</a></h1>
+         <nav class="nav-collapse">
+             <ul class="noList">
+                 
+                 <li class="element first  ">
+                     <a href="/index.html">Home</a>
+                 </li> 
+                 
+                 <li class="element   ">
+                     <a href="/archive">Archive</a>
+                 </li> 
+                 
+                 <li class="element   ">
+                     <a href="/about">About</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/contact">Contact</a>
+                 </li> 
+                 
+                 <!-- <li> <a href="https://github.com/brianmaierjr/long-haul" target="_blank">GitHub</a></li> -->
+             </ul>
+         </nav>
+     </div>
+ </div><!-- end .header -->
+
+
+   <div class="content">
+      <div class="container">
+         <div class="post">
+  
+  <h1 class="postTitle">Visualization of Total Accidents in Malaysia</h1>
+  <p class="meta">February 19, 2018 | <span class="time">3</span> Minute Read</p>
+  
+  <p class="intro"><span class="dropcap">J</span>avascript is definitely not my strong suit.</p>
+<p>Most of the code was adopted from <a href="http://bl.ocks.org/tomschulze/961d57bd1bbd2a9ef993f2e8645cb8d2">this example</a> where I removed some unnecessary code and added projection code for projecting the Malaysia map instead of the world map. Accidents data was retrieved from <a href="http://www.data.gov.my/data/en_US/dataset/statistik-kemalangan-jalan-raya-mengikut-jenis-kemalangan-dan-kecederaan">this link</a> and I structured the necessary data into a JSON file. The map data for Malaysia was provided as part of the assignment but changes were made to the TopoJSON to include the ID of the states so that the accidents data and the map data can be merged. Not much change can be seen from the colours of the choropleth map because the trend for the number of accidents of each state remains constant throughout the years.</p>
+
+<style>
+    body{
+      text-align: center;
+    }
+
+    .countries{
+      stroke: #fff;
+    }
+    .legend rect{
+      stroke: #000;
+    }
+
+    .legend, .legend_title text{
+      font-size:10pt;
+    }
+
+    .barlabel {
+      font-size:8pt;
+      text-anchor: middle;
+
+    }
+  </style>
+
+<script src="http://d3js.org/d3.v4.min.js"></script>
+
+<script src="https://d3js.org/topojson.v2.min.js"></script>
+
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<script src="https://d3js.org/d3-geo-projection.v1.min.js"></script>
+
+<script src="/assets/js/dataviza3.js"></script>
+
+<script>
+    // Code adopted from http://bl.ocks.org/tomschulze/961d57bd1bbd2a9ef993f2e8645cb8d2 and removed unnecessary code and code I do not understand
+    // Code for projecting the map on the appropriate size was adopted from the instructions provided in the Assignment 3 files
+    
+    /// params
+    
+    //Colour if the ID is undefined or used to set other states' color when hovering over legend
+    var color_na = d3.rgb("#d4d4d4");
+    
+    // only works if array.length-1 is between 3 and 9 (d3 color scheme)
+    var quantiles = [0, 0.2, 0.4, 0.6, 0.8, 1];
+    var init_year = 2011;
+    var headline = "Number of accidents in Malaysia by state in ";
+
+    /// main
+    d3.select("div.post").insert("h3").text(headline + init_year);
+    
+    // slider
+    d3.select("div.post").insert("p").append("input")
+        .attr("type", "range")
+        .attr("min", "2011")
+        .attr("max", "2015")
+        .attr("value", init_year)
+        .attr("id", "year");
+
+    // init map container, projection
+    var width = 960, height = 425;
+    var svg_map = d3.select("div.post").insert("svg")
+                  .attr("id", "map")
+                  .attr("height", height)
+                  .attr("width", width);
+    var projection = d3.geoMercator();
+
+    var path = d3.geoPath().projection(projection);
+
+    // init legend container
+    svg_map.append("g")
+        .attr("class", "legend");
+    svg_map.append("g")
+        .attr("class", "legend_title")
+        .append("text");
+
+    // init bars container
+    var margin = {top: 30, right:10, bottom:50, left:30};
+    var svgBarsWidth = 960 - margin.left - margin.right,
+        svgBarsHeight = 200 - margin.top - margin.bottom;
+
+    var x = d3.scaleBand()
+                .rangeRound([0, svgBarsWidth])
+                .padding(.05);
+    var y = d3.scaleLinear().range([svgBarsHeight, 0]);
+
+    var svg_bars = d3.select("div.post")
+        .append("svg")
+          .attr("id", "bars")
+          .attr("width", svgBarsWidth + margin.left + margin.right)
+          .attr("height", svgBarsHeight + margin.top + margin.bottom + 50)
+        .append("g")
+          .attr("class", "bars")
+          .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
+
+    //Load accidents data set
+    d3.json("/assets/data/totalaccidents.json", function(error, d) {
+
+      if (error) throw error;
+
+      let data_all = d['TotalAccidents'];
+
+      let data = data_all[init_year];
+      let color = calcColorScale(data);
+
+      //Load map data and render
+      d3.json("/assets/data/malaysia_topo.json", function(error, malaysianmap) {
+        if (error) throw error;
+        var neighbourhoods = topojson.feature(malaysianmap, malaysianmap.objects.collection); 
+        // set default projection values 
+        projection
+              .scale(1)
+              .translate([0, 0]);
+
+          // creates bounding box and helps with projection and scaling
+          var b = path.bounds(neighbourhoods),
+              s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
+              t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2 - 80];
+
+          // set project with bounding box data
+          projection
+              .scale(s)
+              .translate(t);
+
+        // Drawing the map
+        svg_map.append("g")
+          .attr("class", "countries")
+          .selectAll("path")
+          .data(topojson.feature(malaysianmap, malaysianmap.objects.collection).features)
+          .enter().append("path")
+            .attr("d", path)
+            .attr("id", function(d) { return d.properties.id; })
+            .call(fillMap, color, data);
+
+        // Legends and bar chart
+        renderLegend(color, data);
+        renderBars(color, data);
+      }); // map data
+
+      // Using slider
+      d3.select("#year").on("input", function() {
+          //Update map, legend and bar based on value obtained from slider
+          let upd_color = calcColorScale(data_all[this.value]);
+          updateMap(upd_color, data_all[this.value]);
+          renderLegend(upd_color, data_all[this.value]);
+          renderBars(upd_color, data_all[this.value]);
+      });
+    });
+
+  </script>
+
+
+
+  <!-- POST NAVIGATION -->
+  <div class="postNav clearfix">
+     
+      <a class="prev image" href="/blog/featured-image/"><span>&laquo;&nbsp;Featured Image</span>
+       
+        <img src="/assets/img/dinosaur.jpg" alt="">
+      
+    </a>
+      
+     
+  </div>
+</div>
+
+      </div>
+   </div><!-- end .content -->
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="footer">
+   <div class="container">
+      <p class="copy">&copy; 2018 Tiew Kee Hui Powered by <a href="http://jekyllrb.com">Jekyll</a></p>
+
+      <div class="footer-links"> 
+         <ul class="noList"> 
+            
+            
+            <li><a href="https://www.linkedin.com/in/tiewkh" style="margin-right:0.5em;">
+                <i class="fa fa-linkedin-square" style="font-size:1.5em;"></i>
+            </a></li>
+            
+            
+            <li><a href="https://github.com/tiewkh" style="margin-right:0.5em;">
+                <i class="fa fa-github" style="font-size:1.5em;"></i>
+            </a></li>
+            
+            
+            <li><a href="https://www.youtube.com/channel/UCHvLEzWeKMRyQlAsa5iDHJA" style="margin-right:0.5em;">
+                <i class="fa fa-youtube-play" style="font-size:1.5em;"></i>
+            </a></li>
+            
+            
+            <li><a href="mailto:tiewkeehui95@hotmail.com">
+                  <i class="fa fa-envelope-o" style="font-size:1.5em;"></i>
+            </a></li>
+            
+         </ul>
+      </div>
+   </div>
+</div><!-- end .footer -->
+
+
+   <!-- Add jQuery and other scripts -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src=""><\/script>')</script>
+<script src="/assets/js/dropcap.min.js"></script>
+<script src="/assets/js/responsive-nav.min.js"></script>
+<script src="/assets/js/scripts.js"></script>
+
+
+</body>
+
+</html>
