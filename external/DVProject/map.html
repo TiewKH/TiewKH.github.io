@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<meta charset="utf-8">
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://d3js.org/topojson.v2.min.js"></script>
+	<script src = "https://d3js.org/d3-queue.v2.min.js"></script>
+
+	<script src="sankey.js"></script>
+	<script src="drawsankey.js"></script>
+
+	<!-- jQuery library and Bootstrap -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Crime-Vis-tigator</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="index.html">Over The Years - 1994 to 2013</a></li>
+	      <li class="active"><a href="map.html">Known Offenses by State - 2013</a></li>
+	    </ul>
+      <p class="nav navbar-text pull-right">By Lee Bing Yuan & Tiew Kee Hui</p> 
+	  </div>
+	</nav>
+
+	<!-- <h1>Crime-Vis-tigator</h1> -->
+	<h2>Offenses Known to Law Enforcement by State - 2013</h2>
+	<g>
+		<svg class = "divider" width ="20" height = "800">
+		<rect width = "20" height = "800" x = "0" y = "0" style = "fill:#6D6D6D;"/>
+		</svg>
+	</g>
+
+	<canvas width="800" height="800"></canvas>
+	<div class = "sankey-container"></div>
+
+	<script type="text/javascript">
+		var data = {};
+		var mapping = {};
+		var domain = [];
+		var topo_json = null;
+		var sankey_full_data = null;
+		
+		var units = "cases";
+
+		var active = d3.select(null);
+		//Width and height of map
+		var width = 1000;
+		var height = 800;
+		var sankey_width = 800;
+		var sankey_height = 800;
+
+	  	var col_range_low = "#C7E3FF";
+	  	var col_range_high = "#002D5A";
+		       
+		// Define path generator
+		var path = d3.geoPath();              
+
+		var zoom = d3.zoom()
+		.scaleExtent([1, 8])
+		.on("zoom", zoomed);
+
+		// Define linear scale for output
+		var color = d3.scaleLinear()
+		  .range([col_range_low, col_range_high])
+		  .interpolate(d3.interpolateLab);
+
+		//Create SVG element and append map to the SVG
+		var svg = d3.select("body")
+					.append("svg")
+					.attr("class", "map")
+					.attr("width", width)
+					.attr("height", height)
+					.on("click", stopped, true);
+		
+		svg.append("rect")
+		    .attr("class", "background")
+		    .attr("width", width)
+		    .attr("height", height)
+		    .on("click", reset);
+
+		var g = svg.append("g");  
+
+		//svg.call(zoom); // delete this line to disable free zooming
+
+		// Append Div for tooltip to SVG
+		var div = d3.select("body")
+				    .append("div")   
+		    		.attr("id", "tooltip")               
+		    		.style("opacity", 0);
+
+		// Bringing in my datasets
+		d3.queue()
+			.defer(d3.json, "https://d3js.org/us-10m.v1.json")
+			.defer(d3.csv, "crime_by_state_2013.csv")
+			.defer(d3.csv, "mapping.csv")
+			.defer(d3.csv, "sankey.csv")
+			.await(ready);
+
+		function ready(error, us, crime_data, map, sankey_data) {
+			if (error) throw error;
+
+	        crime_data.forEach(function(d) {
+	          data[d.State] = [ +d.Population,+d.Violent_Crime,+d.Murder_Nonnegligent_Manslaughter,+d.Rape,+d.Robbery,+d.Aggravated_Assult,+d.Property_Crime,+d.Burglary,+d.Larceny_Theft,+d.Motor_Vehicle_Theft,+d.Arson,+d.Total_Crime, d.Tot_Crime_STR, d.Population_STR];
+	          domain.push(+d.Total_Crime);
+	        });
+
+	        map.forEach(function(d) {
+	          mapping[d.id] = [d.code, d.name, d.name_camel];
+	        });
+
+			sankey_full_data = sankey_data;
+	        topo_json = topojson.feature(us, us.objects.states).features;
+	       	color.domain([d3.min(domain),d3.max(domain)]);
+			
+			g.selectAll("path")
+				.data(topojson.feature(us, us.objects.states).features)
+				.enter().append("path")
+				.attr("class", "states")
+				.attr("d", path)
+				.attr("fill", function(d, i)
+				{
+				try {
+				  var stateName = mapping[i][1];
+				  return color(data[stateName][11]);
+				}
+				catch(err) {
+				  return "#C4C4C4";
+				}
+				})
+				.on("mouseover", mouseover) 
+				.on("mouseout", mouseout)
+				.on("click", clicked);
+
+			g.append("path")
+				.attr("class", "state-borders")
+				.attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; })));
+
+			drawlabels(us,map);
+			drawlegend();
+		}
+
+		function drawlabels(us,map){
+			var labelsBg = g.append("svg").attr("class", "label-group-bg");
+			labelsBg.selectAll(".label-bg")
+				.data(topojson.feature(us, us.objects.states).features)
+				.enter()
+				.append("text")
+				.attr("class", "label-bg")
+				.attr("x", function(d) {
+				return path.centroid(d)[0];
+				})
+				.attr("y", function(d) {
+				return path.centroid(d)[1];
+				})
+				.text(function(d,i) {
+					try{
+						return mapping[i][0];
+					}
+					catch(err){return "";}
+				});
+
+			var labels = g.append("svg").attr("class", "label-group");
+			labels.selectAll(".label")
+				.data(topojson.feature(us, us.objects.states).features)
+				.enter()
+				.append("text")
+				.attr("class", "label")
+				.attr("x", function(d) {
+				return path.centroid(d)[0];
+				})
+				.attr("y", function(d) {
+				return path.centroid(d)[1];
+				})
+				.text(function(d,i) {
+					try{
+						return mapping[i][0];
+					}
+					catch(err){return "";}
+				});
+		}
+
+		function drawlegend(){
+			var legend_width = 200,
+			divisions = 100;
+
+			var newData = [];
+			var sectionWidth = Math.floor(legend_width / divisions);
+
+			for (var i=0; i < d3.max(domain); i+= sectionWidth * 2000) {
+				newData.push(i);
+				}
+
+			var legend = g.append("g")
+				.attr("width", 400)
+				.attr("length", 400)
+				.attr("class", "legend")
+				.attr("transform", "translate(680,60)");
+
+			legend.selectAll('rect')
+				.data(newData)
+				.enter()
+				.append('rect')
+				.attr("x", function(d) { return d / 15000; })
+				.attr("y", 10)
+				.attr("height", 15)
+				.attr("width", sectionWidth)
+				.attr('fill', function(d) { return color(d)});
+
+			legend.append("text").text(function(){return d3.min(newData);}).attr("transform","translate(0,0)").style("font-size", "13px");
+			legend.append("text").text(function(){return d3.max(newData) + "+";}).attr("transform","translate(100,0)").style("font-size", "13px");	
+		}
+
+		function mouseover(d,i){
+	    	div.transition()        
+	      	   .duration(200)      
+	           .style("opacity", 1);
+	          try{
+	          	document.getElementById("tooltip").innerHTML = "State Population: "+ data[mapping[i][1]][13] + "<br><br>Total Crimes: " + data[mapping[i][1]][12];
+	          }catch(err){
+	          	document.getElementById("tooltip").innerHTML = mapping[i][1] + "<br><br>Data Unavailable";
+	          }
+	        
+	        div.style("left", (d3.event.pageX) + "px")     
+				.style("top", (d3.event.pageY - 28) + "px");    
+
+		}
+
+		function mouseout(d,i){
+			div.transition()        
+	           .duration(500)      
+	           .style("opacity", 0);   
+		}
+
+		function clicked(d,i) {
+		  //Zooming
+		  if (active.node() === this) return reset(d,i);
+		  active.classed("active", false);
+		  active = d3.select(this).classed("active", true);
+
+		  var bounds = path.bounds(d),
+		      dx = bounds[1][0] - bounds[0][0],
+		      dy = bounds[1][1] - bounds[0][1],
+		      x = (bounds[0][0] + bounds[1][0]) / 2,
+		      y = (bounds[0][1] + bounds[1][1]) / 2,
+		      scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
+		      translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+		  svg.transition()
+		      .duration(500)
+		      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+		  
+		  //Update map labels
+		  redraw(2, true);
+
+		  //Show plot divider
+		  d3.select(".divider")
+		  	.transition()
+		  	.duration(1000)
+		  	.style("opacity", "1");
+		  
+		  //Draw Sankey
+		  drawSankey(i);
+		}	
+
+		function reset(d,i) {
+			active.classed("active", false);
+
+			active = d3.select(null);
+
+			d3.select(".divider")
+			.transition()
+			.duration(500)
+			.style("opacity", "0");
+
+			svg.transition()
+				.duration(750)
+				.call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
+
+			//Redraw map label
+			redraw(0, false); 
+
+			//Remove Sankey svg, make ready for new one
+			d3.selectAll(".sankey")
+				.transition()
+				.duration(1000)
+				.style("opacity", 0)
+				.remove();
+
+			//Hide flow canvas 
+			d3.selectAll("canvas")
+				.transition()
+				.duration(500)
+				.style("opacity", 0);		
+		}
+
+		function zoomed() {
+		  g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+		  g.attr("transform", d3.event.transform) // updated for d3 v4
+		}
+
+		// If the drag behavior prevents the default click,
+		// also stop propagation so we don’t click-to-zoom.
+		function stopped() {
+		  if (d3.event.defaultPrevented) d3.event.stopPropagation();
+		}
+
+		function redraw(idx, zoomed){
+			d3.selectAll(".label-bg")
+				.data(topo_json)
+				.style("font-size", function(idx){
+					if (zoomed){ 
+						return "0.4rem"; 
+					}
+					else 
+						return "1.2rem";})
+				.transition().delay(500)
+				.text(function(d,i) {
+					try{
+						return mapping[i][idx];
+					}
+					catch(err){return "";}
+				});
+
+			d3.selectAll(".label")
+				.data(topo_json)
+				.style("font-size", function(idx){
+					if (zoomed){ 
+						return "0.4rem"; 
+					}
+					else 
+						return "1.2rem";})
+				.transition().delay(500)
+				.text(function(d,i) {
+					try{
+						return mapping[i][idx];
+					}
+					catch(err){return "";}
+				});
+		}
+
+	</script>
+</body>
+</html>

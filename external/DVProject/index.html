@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="//d3js.org/queue.v1.min.js"></script>
+    <script src="smallmultiples.js"></script>
+    
+	<!-- jQuery library and Bootstrap -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="styles-tiew.css">
+    
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Crime-Vis-tigator</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li class="active"><a href="index.html">Over The Years - 1994 to 2013</a></li>
+	      <li><a href="map.html">Known Offenses by State - 2013</a></li>
+	    </ul>
+      <p class="nav navbar-text pull-right">By Lee Bing Yuan & Tiew Kee Hui</p> 
+	  </div>
+	</nav>
+
+    <div style='width:100%'><h2>Crime Trend In USA From 1994 to 2013</h2></div>
+    <div style='width:100%'>
+	    <div class='line-chart' id='line-chart'></div>
+	    <div class='legend-box' id='legend-box'></div>
+	</div>
+    <div style='width:100%'><h2>Year over Year (YoY) growth by percentage (%)</h2></div>
+    <div class = 'small-multiples-container' id='small-multiples-container'></div>
+
+    <div id='overlay'></div>
+    <script>
+        
+        line_chart_margin = {top: 10, right: 50, bottom: 30, left: 75},
+        line_chart_width = 900 - line_chart_margin.left - line_chart_margin.right,
+        line_chart_height = 400 - line_chart_margin.top - line_chart_margin.bottom;
+        
+        legend_width = 500;
+        
+        var parseDate = d3.timeParse("%Y");
+        var parseDate2 = d3.timeParse("%d-%m-%Y");
+        
+        var xScale = d3.scaleTime().range([0, line_chart_width]),
+            yScale = d3.scaleLinear().range([line_chart_height, 0]),
+            xAxisCall = d3.axisBottom().ticks(20),
+            yAxisCall = d3.axisLeft().ticks(20);
+        
+        var svg = d3.select("#line-chart").append("svg")
+                    .attr("width", line_chart_width + line_chart_margin.left + line_chart_margin.right)
+                    .attr("height", line_chart_height + line_chart_margin.top + line_chart_margin.bottom)
+                    .attr("class", "line-chart-svg")
+                    .style("display", "block")
+                    .style("margin", "auto")
+                    .append("g")
+                        .attr("class", 'line-chart-g')
+                        .attr("transform", "translate(" + line_chart_margin.left + "," + line_chart_margin.top + ")");
+                  
+        var svg_legend = d3.select("#legend-box").append("svg")
+                            .attr("width", legend_width)
+                            .attr("height", line_chart_height + line_chart_margin.top + line_chart_margin.bottom)
+                            .style("display", "block")
+                   			.style("margin", "auto")
+                            .append("g")
+                                .attr("class", 'legend')
+                                .attr("transform", "translate(" + line_chart_margin.left + "," + line_chart_margin.top + ")");
+       
+        var line = d3.line()
+            .x(function(d) { return xScale(d.Year); })
+            .y(function(d) { return yScale(d.value); });
+            
+        
+        
+        d3.csv('data2.csv', function(error, data) {
+            //console.log(data);
+            
+            if (error) throw error;
+            
+            data.forEach(function(d) {
+                d.Year = parseDate(d.Year);
+                d.value= +d.value;
+            });
+
+            //console.log(d3.extent(data, function(d) { return parseDate(d.Year); }));
+            
+            xScale.domain(d3.extent(data, function(d) { return d.Year; }));
+
+            yScale.domain([0, d3.max(data, function(d) { return d.value; })]);
+            
+            xAxisCall.scale(xScale);
+            
+            yAxisCall.scale(yScale);
+                        
+            var dataNest = d3.nest()
+                        .key(function(d) {return d.variable;})
+                        .entries(data);        
+            //console.log(dataNest);
+            var color = d3.scaleOrdinal().domain(["ViolentCrime","MurderAndNonnegligentManslaughter","Rape","Robbery","AggravatedAssault","PropertyCrime","Burglary","LarcenyTheft","MotorVehicleTheft"]).range(["#e6194b", "#3cb44b" , "#CCCC00", "#ff69b4", "#aa6e28", "#f032e6", "#808080", "#ff8300", "#000080"]);
+
+             drawLines(svg, dataNest);
+             mouseHoverLine(svg, dataNest);
+            
+             d3.select('svg.line-chart-svg').append("g")
+                .attr("class", "axis-x")
+                .attr("transform", "translate(" + line_chart_margin.left + "," + (line_chart_height + line_chart_margin.top) + ")")
+                .call(xAxisCall)
+                .append("text")
+                    .attr("x", line_chart_width / 2)
+                    .attr("y", 20)
+                    .attr("dy", "0.71em")
+                    .attr("fill", "#000")
+                    .text("Year");;
+    
+             d3.select('svg.line-chart-svg').append("g")
+                .attr("transform", "translate(" + line_chart_margin.left + "," + line_chart_margin.top + ")")
+                .attr("class", "axis-y")
+                .call(yAxisCall)
+                .append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("x", -5)
+                    .attr("y", 6)
+                    .attr("dy", "0.71em")
+                    .attr("fill", "#000")
+                    .text("Crime Count");
+          
+             var legendSpace = line_chart_width + line_chart_margin.left;
+             
+             var legend = svg_legend.selectAll('.legend').data(dataNest)
+             var user_clicks_legend = [];
+             
+             legend.enter().append('text').attr('class', 'legend')
+                    .attr("x", "10%")
+                    .attr("y", function(d,i){return String(15 + (i * 8)) + "%";})
+                    //.attr("dy", ".35em")
+                    .text(function (d, i) {
+                        return d.key.replace(/([a-z])([A-Z])/g, '$1 $2');
+                    })
+                    .style("fill", function(d) { // Add the colours dynamically
+                        return d.color = color(d.key); 
+                    })
+                    .style("font-size", "1em")
+                    .on("click", function(d){
+                        
+                        console.log(d3.select(this).select("text"));
+                        if (!user_clicks_legend.includes(d.key)){
+                            user_clicks_legend.push(d.key);
+                            d3.select(this).style("fill", "#ffffff");
+                        }
+                        else if (user_clicks_legend.includes(d.key)){
+                            var index = user_clicks_legend.indexOf(d.key);
+            
+                            if (index !== -1) {
+                                user_clicks_legend.splice(index, 1);
+                            }
+                            
+                            d3.select(this).style("fill", color(d.key));
+                        }
+                        //console.log(user_clicks_legend);
+                        redraw(user_clicks_legend);
+                        
+                    })
+             
+             function redraw(array_of_removed_category){
+                
+                d3.selectAll(".line-chart-g").remove();
+                
+                var svg = d3.select(".line-chart-svg")
+                            .append("g")
+                                .attr("class", 'line-chart-g')
+                                .attr("transform", "translate(" + line_chart_margin.left + "," + line_chart_margin.top + ")");
+                                
+                //Hard copy of array
+                new_data_nest = dataNest.slice(0);
+                
+                //Remove selected categories from user's legend clicks
+                for(var i = 0; i < array_of_removed_category.length; i++){
+                    var removeIndex = new_data_nest.map(function(item) { return item.key; }).indexOf(array_of_removed_category[i]);
+                    new_data_nest.splice(removeIndex, 1);
+                }
+                //console.log(new_data_nest);
+                
+                //console.log(new_data_nest);
+                //xScale.domain(d3.extent(new_data_nest, function(d) { return d.Year; }));
+
+                yScale.domain([0, d3.max(new_data_nest, function(d) { return d3.max(d.values, function(d) { return (d.value); }) ;})]);
+                //xAxisCall.scale(xScale);
+            
+                yAxisCall.scale(yScale);
+                var line = d3.line()
+                    .x(function(d) { return xScale(d.Year); })
+                    .y(function(d) { return yScale(d.value); });
+                    
+                
+                //svg.select(".axis-x").transition(1000).call(xAxisCall);
+                 d3.select(".axis-y").transition(1000).call(yAxisCall);
+                
+                 drawLines(svg, new_data_nest);
+                            
+                 mouseHoverLine(svg, new_data_nest);
+             }
+             
+             function drawLines(svg, data){
+                var path = svg.selectAll("path").data(data).enter().append("path").attr("class", "line")
+                        .style("stroke", function (d) {return d.color = color(d.key);})
+                        .attr("id", function (d) { return 'tag' + d.key.replace(/\s+/g, '');})
+                        .attr("d", function (d) { return line(d.values);})
+                        .attr("stroke-dasharray", function(){
+                            var totalLength = this.getTotalLength();
+                            return totalLength + " " + totalLength;
+                        })
+                        .attr("stroke-dashoffset", function(){
+                            var totalLength = this.getTotalLength();
+                            return totalLength;
+                        })
+                        .transition()
+                            .duration(1000)
+                            .ease(d3.easeLinear)
+                            .attr("stroke-dashoffset", 0);
+             }
+             
+             //Code adopted from https://bl.ocks.org/larsenmtl/e3b8b7c2ca4787f77d78f58d41c3da91
+             function mouseHoverLine(svg, data){
+                var mouseG = svg.append("g").attr("class", "mouse-over-effects");
+             
+                 mouseG.append("path") // this is the black vertical line to follow mouse
+                        .attr("class", "mouse-line")
+                        .style("stroke", "black")
+                        .style("stroke-width", "1px")
+                        .style("opacity", "0");
+                        
+                 var lines = document.getElementsByClassName('line');
+                
+                 var mousePerLine = mouseG.selectAll('.mouse-per-line')
+                                          .data(data)
+                                          .enter()
+                                          .append("g")
+                                          .attr("class", "mouse-per-line");
+                                          
+                 mousePerLine.append("circle")
+                              .attr("r", 7)
+                              .style("stroke", function(d) {
+                                return color(d.key);
+                              })
+                              .style("fill", "none")
+                              .style("stroke-width", "1px")
+                              .style("opacity", "0");
+
+                 mousePerLine.append("text")
+                              .attr("transform", "translate(10,3)");
+                              
+                 mouseG.append('svg:rect') // append a rect to catch mouse movements on canvas
+                          .attr('width', line_chart_width) // can't catch mouse events on a g element
+                          .attr('height', line_chart_height)
+                          .attr('fill', 'none')
+                          .attr('pointer-events', 'all')
+                          .on('mouseout', function() { // on mouse out hide line, circles and text
+                            d3.select(".mouse-line")
+                              .style("opacity", "0");
+                            d3.selectAll(".mouse-per-line circle")
+                              .style("opacity", "0");
+                            d3.selectAll(".mouse-per-line text")
+                              .style("opacity", "0");
+                          })
+                          .on('mouseover', function() { // on mouse in show line, circles and text
+                            d3.select(".mouse-line")
+                              .style("opacity", "1");
+                            d3.selectAll(".mouse-per-line circle")
+                              .style("opacity", "1");
+                            d3.selectAll(".mouse-per-line text")
+                              .style("opacity", "1");
+                          })
+                          .on('mousemove', function() { // mouse moving over canvas
+                            var mouse = d3.mouse(this);
+                            d3.select(".mouse-line")
+                              .attr("d", function() {
+                                var d = "M" + mouse[0] + "," + line_chart_height;
+                                d += " " + mouse[0] + "," + 0;
+                                return d;
+                              });
+
+                            d3.selectAll(".mouse-per-line")
+                                .attr("transform", function(d, i) {
+                                    //console.log(width/mouse[0])
+                                    var xDate = xScale.invert(mouse[0]),
+                                    bisect = d3.bisector(function(d) { return d.Year; }).right;
+                                    idx = bisect(d.values, xDate);
+                
+                                    var beginning = 0,
+                                    end = lines[i].getTotalLength(),
+                                    target = null;
+
+                                    while (true){
+                                        target = Math.floor((beginning + end) / 2);
+                                        pos = lines[i].getPointAtLength(target);
+                                        if ((target === end || target === beginning) && pos.x !== mouse[0]) {
+                                            break;
+                                    }
+                                    if (pos.x > mouse[0])      end = target;
+                                    else if (pos.x < mouse[0]) beginning = target;
+                                    else break; //position found
+                                }
+                
+                                d3.select(this).select('text')
+                                    .text(yScale.invert(pos.y).toFixed(0));
+                  
+                                return "translate(" + mouse[0] + "," + pos.y +")";
+                            });
+                         });
+                    } 
+        });
+        
+        drawSmallMultiples();
+    </script>
+</body>
+
+
+</html>

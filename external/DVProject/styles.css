@@ -1,0 +1,154 @@
+path:hover {
+	fill-opacity: .7;
+}
+
+.states:hover {
+    cursor: pointer;
+    stroke: #FFFB00;
+    stroke-width: 2px;
+}
+
+.states.active {
+    cursor: pointer;
+    stroke: #FFFB00;
+    stroke-width: 4px;
+    fill:#BD00FF;
+    transition: fill 1s;
+}
+
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+/* Style for Custom Tooltip */
+#tooltip {   
+	font-family: "Proxima Nova", "Montserrat", sans-serif;
+	font-size:14px;
+ 	position: absolute;           
+	text-align: center;           
+	width: 150px;                  
+	height: 100px;                 
+	padding: 2px;               
+	background: white;   
+	border: 0px;      
+	border-radius: 8px;           
+	pointer-events: none;
+	transition: left 0.5s;
+	transition: top 0.5s;       
+}
+        
+/* Legend Font Style */
+body {
+	font-family: "Proxima Nova", "Montserrat", sans-serif;	
+	background-color: #DBEDFE;
+}
+        
+/* Legend Position Style */
+.legend {
+	position:absolute;
+
+	left:800px;
+	top:350px;
+}
+
+.state-borders {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.label-bg {
+	pointer-events: none;
+	text-anchor: middle;
+	fill: none;
+	stroke: white;
+	font-size: 1.2rem;
+	stroke-width: 0.2rem;
+	opacity: 0.9;
+	transition: font-size 0.5s ease;
+}
+
+.label {
+	z-index: 10;
+	pointer-events: none;
+	text-anchor: middle;
+	font-size: 1.2rem;
+	text-shadow: 0 0 3px #fff;
+	fill: rgb(70, 70, 70);
+	transition: font-size 0.5s ease;
+}
+
+/*Sankey Elements*/
+.node rect {
+  cursor: move;
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: #85C2FF;
+  stroke-opacity: .2;
+}
+
+.link:hover {
+  stroke-opacity: .5;
+}
+
+/*Our canvases*/
+.map{
+	position:absolute;
+	left:0px;
+	top:130px;
+}
+
+.divider {
+	position:absolute;
+	left:1000px;
+	top:130px;
+	opacity:0;
+}
+
+.sankey-container {
+	position:absolute;
+	left:1000px;
+	top:130px;
+}
+
+svg {
+  position: absolute;
+}
+
+canvas {
+	position: absolute;
+	left:1000px;
+	top:130px;
+}
+
+h1 {
+	font-family: "Proxima Nova", "Montserrat", sans-serif;
+	font-size: 35px;
+	font-weight:900;
+}
+
+h2 {
+	font-family: "Proxima Nova", "Montserrat", sans-serif;
+	font-size: 25px;
+    width:100%;
+    text-align:center;
+	font-weight:900;
+	font-style: italic;
+}
+
+.nav navbar-nav{
+	font-size: 1.3em;
+}

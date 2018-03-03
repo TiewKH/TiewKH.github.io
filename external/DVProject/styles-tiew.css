@@ -1,0 +1,118 @@
+body {
+    font-family: "Proxima Nova", "Montserrat", sans-serif;
+    background-color: #DBEDFE;
+}
+
+.line-chart{
+    float: left;
+    width: 60%;
+}
+
+.legend-box{
+    overflow:hidden;
+    z-index: 1;
+}
+
+.line {
+    fill: none;
+    stroke-width: 2px;
+}
+
+.legend{
+    font-weight: bold;
+    width:35%;
+    font-size: 1.2em;
+    position: absolute;
+}
+
+.small-multiples-container{
+    text-align:center;
+    font-family: "Proxima Nova", "Montserrat", sans-serif;
+    font-size: 0.8em;
+}
+
+div.smallmultipletooltip {
+    position: absolute;
+    text-align: right;
+    width: 15%;
+    height: 10%;
+    padding: 6px;
+    font: 1em sans-serif;
+    background: white;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.bigtooltip {
+    position: absolute;
+    text-align:center;
+    font-family: "Proxima Nova", "Montserrat", sans-serif;
+    font-size: 1em;
+    width: 20%;
+    height: 12%;
+    padding: 6px;
+    background: white;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.bar--positive {
+    fill: steelblue;
+}
+
+.bar--negative {
+    fill: brown;
+}
+
+.axis text {
+    font-family: "Proxima Nova", "Montserrat", sans-serif;
+    font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+h2{
+    font-family: "Proxima Nova", "Montserrat", sans-serif;
+    font-size: 25px;
+    margin-left: 1em;
+    vertical-align: middle;
+    bottom:25px;
+    font-style: italic;
+    text-align: center;
+    font-weight:900;
+}
+
+h1 {
+    font-family: "Proxima Nova", "Montserrat", sans-serif;
+    font-size: 35px;
+    font-weight:900;
+}
+
+.nav navbar-nav{
+    font-size: 1.3em;
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    overflow: scroll;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #DBEDFE; /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+    margin-right: auto; 
+    margin-left: auto;\
+    
+}

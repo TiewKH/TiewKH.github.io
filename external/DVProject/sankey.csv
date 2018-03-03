@@ -1,0 +1,501 @@
+"source","target","value"
+"ALABAMA","Violent Crime",14324
+"ALABAMA","Murder Nonnegligent Manslaughter",228
+"ALABAMA","Rape",1154
+"ALABAMA","Robbery",3576
+"ALABAMA","Aggravated Assault",9433
+"ALABAMA","Property Crime",110445
+"ALABAMA","Burglary",26399
+"ALABAMA","Larceny Theft",77067
+"ALABAMA","Motor Vehicle Theft",6979
+"ALABAMA","Arson",24
+"ALASKA","Violent Crime",3498
+"ALASKA","Murder Nonnegligent Manslaughter",16
+"ALASKA","Rape",553
+"ALASKA","Robbery",599
+"ALASKA","Aggravated Assault",2330
+"ALASKA","Property Crime",17776
+"ALASKA","Burglary",1924
+"ALASKA","Larceny Theft",14577
+"ALASKA","Motor Vehicle Theft",1275
+"ALASKA","Arson",121
+"ARIZONA","Violent Crime",21161
+"ARIZONA","Murder Nonnegligent Manslaughter",248
+"ARIZONA","Rape",60
+"ARIZONA","Robbery",6132
+"ARIZONA","Aggravated Assault",13247
+"ARIZONA","Property Crime",181403
+"ARIZONA","Burglary",37936
+"ARIZONA","Larceny Theft",129979
+"ARIZONA","Motor Vehicle Theft",13488
+"ARIZONA","Arson",1028
+"ARKANSAS","Violent Crime",9181
+"ARKANSAS","Murder Nonnegligent Manslaughter",103
+"ARKANSAS","Rape",874
+"ARKANSAS","Robbery",1892
+"ARKANSAS","Aggravated Assault",6312
+"ARKANSAS","Property Crime",74226
+"ARKANSAS","Burglary",19363
+"ARKANSAS","Larceny Theft",51346
+"ARKANSAS","Motor Vehicle Theft",3517
+"ARKANSAS","Arson",307
+"CALIFORNIA","Violent Crime",124598
+"CALIFORNIA","Murder Nonnegligent Manslaughter",1400
+"CALIFORNIA","Rape",0
+"CALIFORNIA","Robbery",48035
+"CALIFORNIA","Aggravated Assault",69099
+"CALIFORNIA","Property Crime",869985
+"CALIFORNIA","Burglary",190417
+"CALIFORNIA","Larceny Theft",539803
+"CALIFORNIA","Motor Vehicle Theft",139765
+"CALIFORNIA","Arson",6203
+"COLORADO","Violent Crime",13438
+"COLORADO","Murder Nonnegligent Manslaughter",134
+"COLORADO","Rape",2291
+"COLORADO","Robbery",2923
+"COLORADO","Aggravated Assault",8090
+"COLORADO","Property Crime",116633
+"COLORADO","Burglary",20321
+"COLORADO","Larceny Theft",85753
+"COLORADO","Motor Vehicle Theft",10559
+"COLORADO","Arson",664
+"CONNECTICUT","Violent Crime",8795
+"CONNECTICUT","Murder Nonnegligent Manslaughter",80
+"CONNECTICUT","Rape",420
+"CONNECTICUT","Robbery",3466
+"CONNECTICUT","Aggravated Assault",4576
+"CONNECTICUT","Property Crime",65542
+"CONNECTICUT","Burglary",11520
+"CONNECTICUT","Larceny Theft",48240
+"CONNECTICUT","Motor Vehicle Theft",5782
+"CONNECTICUT","Arson",220
+"DELAWARE","Violent Crime",2148
+"DELAWARE","Murder Nonnegligent Manslaughter",21
+"DELAWARE","Rape",113
+"DELAWARE","Robbery",687
+"DELAWARE","Aggravated Assault",1327
+"DELAWARE","Property Crime",11154
+"DELAWARE","Burglary",1995
+"DELAWARE","Larceny Theft",8576
+"DELAWARE","Motor Vehicle Theft",583
+"DELAWARE","Arson",4
+"DISTRICT OF COLUMBIA","Violent Crime",7880
+"DISTRICT OF COLUMBIA","Murder Nonnegligent Manslaughter",103
+"DISTRICT OF COLUMBIA","Rape",393
+"DISTRICT OF COLUMBIA","Robbery",3660
+"DISTRICT OF COLUMBIA","Aggravated Assault",3724
+"DISTRICT OF COLUMBIA","Property Crime",29569
+"DISTRICT OF COLUMBIA","Burglary",3314
+"DISTRICT OF COLUMBIA","Larceny Theft",23108
+"DISTRICT OF COLUMBIA","Motor Vehicle Theft",3147
+"DISTRICT OF COLUMBIA","Arson",0
+"FLORIDA","Violent Crime",53138
+"FLORIDA","Murder Nonnegligent Manslaughter",575
+"FLORIDA","Rape",3397
+"FLORIDA","Robbery",15720
+"FLORIDA","Aggravated Assault",33446
+"FLORIDA","Property Crime",359281
+"FLORIDA","Burglary",76450
+"FLORIDA","Larceny Theft",262253
+"FLORIDA","Motor Vehicle Theft",20592
+"FLORIDA","Arson",964
+"GEORGIA","Violent Crime",18151
+"GEORGIA","Murder Nonnegligent Manslaughter",282
+"GEORGIA","Rape",0
+"GEORGIA","Robbery",6639
+"GEORGIA","Aggravated Assault",10434
+"GEORGIA","Property Crime",158064
+"GEORGIA","Burglary",34513
+"GEORGIA","Larceny Theft",111589
+"GEORGIA","Motor Vehicle Theft",11962
+"GEORGIA","Arson",374
+"IDAHO","Violent Crime",2352
+"IDAHO","Murder Nonnegligent Manslaughter",11
+"IDAHO","Rape",438
+"IDAHO","Robbery",183
+"IDAHO","Aggravated Assault",1720
+"IDAHO","Property Crime",22527
+"IDAHO","Burglary",4262
+"IDAHO","Larceny Theft",17206
+"IDAHO","Motor Vehicle Theft",1059
+"IDAHO","Arson",136
+"ILLINOIS","Violent Crime",18679
+"ILLINOIS","Murder Nonnegligent Manslaughter",616
+"ILLINOIS","Rape",145
+"ILLINOIS","Robbery",16699
+"ILLINOIS","Aggravated Assault",11756
+"ILLINOIS","Property Crime",250339
+"ILLINOIS","Burglary",47633
+"ILLINOIS","Larceny Theft",184193
+"ILLINOIS","Motor Vehicle Theft",18513
+"ILLINOIS","Arson",1342
+"INDIANA","Violent Crime",18751
+"INDIANA","Murder Nonnegligent Manslaughter",287
+"INDIANA","Rape",916
+"INDIANA","Robbery",6475
+"INDIANA","Aggravated Assault",10601
+"INDIANA","Property Crime",134414
+"INDIANA","Burglary",30285
+"INDIANA","Larceny Theft",93080
+"INDIANA","Motor Vehicle Theft",11049
+"INDIANA","Arson",790
+"IOWA","Violent Crime",6112
+"IOWA","Murder Nonnegligent Manslaughter",27
+"IOWA","Rape",797
+"IOWA","Robbery",839
+"IOWA","Aggravated Assault",4449
+"IOWA","Property Crime",53901
+"IOWA","Burglary",11358
+"IOWA","Larceny Theft",39214
+"IOWA","Motor Vehicle Theft",3329
+"IOWA","Arson",332
+"KANSAS","Violent Crime",7967
+"KANSAS","Murder Nonnegligent Manslaughter",76
+"KANSAS","Rape",698
+"KANSAS","Robbery",1259
+"KANSAS","Aggravated Assault",5746
+"KANSAS","Property Crime",69079
+"KANSAS","Burglary",13029
+"KANSAS","Larceny Theft",50404
+"KANSAS","Motor Vehicle Theft",5646
+"KANSAS","Arson",387
+"KENTUCKY","Violent Crime",7246
+"KENTUCKY","Murder Nonnegligent Manslaughter",100
+"KENTUCKY","Rape",677
+"KENTUCKY","Robbery",2964
+"KENTUCKY","Aggravated Assault",3345
+"KENTUCKY","Property Crime",82064
+"KENTUCKY","Burglary",17908
+"KENTUCKY","Larceny Theft",59516
+"KENTUCKY","Motor Vehicle Theft",4640
+"KENTUCKY","Arson",405
+"LOUISIANA","Violent Crime",13514
+"LOUISIANA","Murder Nonnegligent Manslaughter",324
+"LOUISIANA","Rape",10
+"LOUISIANA","Robbery",4069
+"LOUISIANA","Aggravated Assault",8472
+"LOUISIANA","Property Crime",89543
+"LOUISIANA","Burglary",22168
+"LOUISIANA","Larceny Theft",62251
+"LOUISIANA","Motor Vehicle Theft",5124
+"LOUISIANA","Arson",264
+"MAINE","Violent Crime",1291
+"MAINE","Murder Nonnegligent Manslaughter",12
+"MAINE","Rape",138
+"MAINE","Robbery",297
+"MAINE","Aggravated Assault",682
+"MAINE","Property Crime",23616
+"MAINE","Burglary",4201
+"MAINE","Larceny Theft",18810
+"MAINE","Motor Vehicle Theft",605
+"MAINE","Arson",104
+"MARYLAND","Violent Crime",11862
+"MARYLAND","Murder Nonnegligent Manslaughter",253
+"MARYLAND","Rape",0
+"MARYLAND","Robbery",4787
+"MARYLAND","Aggravated Assault",6387
+"MARYLAND","Property Crime",53055
+"MARYLAND","Burglary",11438
+"MARYLAND","Larceny Theft",36016
+"MARYLAND","Motor Vehicle Theft",5601
+"MARYLAND","Arson",400
+"MASSACHUSETTS","Violent Crime",25991
+"MASSACHUSETTS","Murder Nonnegligent Manslaughter",133
+"MASSACHUSETTS","Rape",1720
+"MASSACHUSETTS","Robbery",6394
+"MASSACHUSETTS","Aggravated Assault",17445
+"MASSACHUSETTS","Property Crime",129599
+"MASSACHUSETTS","Burglary",29556
+"MASSACHUSETTS","Larceny Theft",91176
+"MASSACHUSETTS","Motor Vehicle Theft",8867
+"MASSACHUSETTS","Arson",493
+"MICHIGAN","Violent Crime",33749
+"MICHIGAN","Murder Nonnegligent Manslaughter",532
+"MICHIGAN","Rape",3490
+"MICHIGAN","Robbery",9022
+"MICHIGAN","Aggravated Assault",20705
+"MICHIGAN","Property Crime",160829
+"MICHIGAN","Burglary",38454
+"MICHIGAN","Larceny Theft",101283
+"MICHIGAN","Motor Vehicle Theft",21092
+"MICHIGAN","Arson",1512
+"MINNESOTA","Violent Crime",10989
+"MINNESOTA","Murder Nonnegligent Manslaughter",94
+"MINNESOTA","Rape",1550
+"MINNESOTA","Robbery",3594
+"MINNESOTA","Aggravated Assault",5751
+"MINNESOTA","Property Crime",110641
+"MINNESOTA","Burglary",17898
+"MINNESOTA","Larceny Theft",85979
+"MINNESOTA","Motor Vehicle Theft",6764
+"MINNESOTA","Arson",615
+"MISSISSIPPI","Violent Crime",3772
+"MISSISSIPPI","Murder Nonnegligent Manslaughter",96
+"MISSISSIPPI","Rape",89
+"MISSISSIPPI","Robbery",1565
+"MISSISSIPPI","Aggravated Assault",1753
+"MISSISSIPPI","Property Crime",39950
+"MISSISSIPPI","Burglary",10610
+"MISSISSIPPI","Larceny Theft",27136
+"MISSISSIPPI","Motor Vehicle Theft",2204
+"MISSISSIPPI","Arson",258
+"MISSOURI","Violent Crime",21347
+"MISSOURI","Murder Nonnegligent Manslaughter",305
+"MISSOURI","Rape",1797
+"MISSOURI","Robbery",5104
+"MISSOURI","Aggravated Assault",14141
+"MISSOURI","Property Crime",152914
+"MISSOURI","Burglary",28641
+"MISSOURI","Larceny Theft",110672
+"MISSOURI","Motor Vehicle Theft",13601
+"MISSOURI","Arson",771
+"MONTANA","Violent Crime",1290
+"MONTANA","Murder Nonnegligent Manslaughter",10
+"MONTANA","Rape",217
+"MONTANA","Robbery",170
+"MONTANA","Aggravated Assault",893
+"MONTANA","Property Crime",17592
+"MONTANA","Burglary",2498
+"MONTANA","Larceny Theft",14032
+"MONTANA","Motor Vehicle Theft",1062
+"MONTANA","Arson",66
+"NEBRASKA","Violent Crime",4177
+"NEBRASKA","Murder Nonnegligent Manslaughter",50
+"NEBRASKA","Rape",198
+"NEBRASKA","Robbery",1007
+"NEBRASKA","Aggravated Assault",2554
+"NEBRASKA","Property Crime",40647
+"NEBRASKA","Burglary",7068
+"NEBRASKA","Larceny Theft",29621
+"NEBRASKA","Motor Vehicle Theft",3958
+"NEBRASKA","Arson",177
+"NEVADA","Violent Crime",15196
+"NEVADA","Murder Nonnegligent Manslaughter",140
+"NEVADA","Rape",0
+"NEVADA","Robbery",5094
+"NEVADA","Aggravated Assault",8981
+"NEVADA","Property Crime",71226
+"NEVADA","Burglary",20799
+"NEVADA","Larceny Theft",40951
+"NEVADA","Motor Vehicle Theft",9476
+"NEVADA","Arson",323
+"NEW HAMPSHIRE","Violent Crime",2574
+"NEW HAMPSHIRE","Murder Nonnegligent Manslaughter",21
+"NEW HAMPSHIRE","Rape",610
+"NEW HAMPSHIRE","Robbery",625
+"NEW HAMPSHIRE","Aggravated Assault",1318
+"NEW HAMPSHIRE","Property Crime",26208
+"NEW HAMPSHIRE","Burglary",4343
+"NEW HAMPSHIRE","Larceny Theft",21026
+"NEW HAMPSHIRE","Motor Vehicle Theft",839
+"NEW HAMPSHIRE","Arson",216
+"NEW JERSEY","Violent Crime",22708
+"NEW JERSEY","Murder Nonnegligent Manslaughter",337
+"NEW JERSEY","Rape",0
+"NEW JERSEY","Robbery",11054
+"NEW JERSEY","Aggravated Assault",10547
+"NEW JERSEY","Property Crime",154721
+"NEW JERSEY","Burglary",33213
+"NEW JERSEY","Larceny Theft",108560
+"NEW JERSEY","Motor Vehicle Theft",12948
+"NEW JERSEY","Arson",519
+"NEW MEXICO","Violent Crime",6921
+"NEW MEXICO","Murder Nonnegligent Manslaughter",63
+"NEW MEXICO","Rape",0
+"NEW MEXICO","Robbery",1339
+"NEW MEXICO","Aggravated Assault",4827
+"NEW MEXICO","Property Crime",47774
+"NEW MEXICO","Burglary",11083
+"NEW MEXICO","Larceny Theft",32848
+"NEW MEXICO","Motor Vehicle Theft",3843
+"NEW MEXICO","Arson",147
+"NEW YORK","Violent Crime",70155
+"NEW YORK","Murder Nonnegligent Manslaughter",545
+"NEW YORK","Rape",0
+"NEW YORK","Robbery",25370
+"NEW YORK","Aggravated Assault",42199
+"NEW YORK","Property Crime",275827
+"NEW YORK","Burglary",41650
+"NEW YORK","Larceny Theft",221682
+"NEW YORK","Motor Vehicle Theft",12495
+"NEW YORK","Arson",350
+"NORTH CAROLINA","Violent Crime",21119
+"NORTH CAROLINA","Murder Nonnegligent Manslaughter",257
+"NORTH CAROLINA","Rape",0
+"NORTH CAROLINA","Robbery",6818
+"NORTH CAROLINA","Aggravated Assault",13026
+"NORTH CAROLINA","Property Crime",179769
+"NORTH CAROLINA","Burglary",44312
+"NORTH CAROLINA","Larceny Theft",127117
+"NORTH CAROLINA","Motor Vehicle Theft",8340
+"NORTH CAROLINA","Arson",844
+"NORTH DAKOTA","Violent Crime",1326
+"NORTH DAKOTA","Murder Nonnegligent Manslaughter",6
+"NORTH DAKOTA","Rape",234
+"NORTH DAKOTA","Robbery",144
+"NORTH DAKOTA","Aggravated Assault",942
+"NORTH DAKOTA","Property Crime",11510
+"NORTH DAKOTA","Burglary",2023
+"NORTH DAKOTA","Larceny Theft",8579
+"NORTH DAKOTA","Motor Vehicle Theft",908
+"NORTH DAKOTA","Arson",60
+"OHIO","Violent Crime",22605
+"OHIO","Murder Nonnegligent Manslaughter",313
+"OHIO","Rape",1903
+"OHIO","Robbery",10360
+"OHIO","Aggravated Assault",9668
+"OHIO","Property Crime",191959
+"OHIO","Burglary",53852
+"OHIO","Larceny Theft",132054
+"OHIO","Motor Vehicle Theft",12474
+"OHIO","Arson",1455
+"OKLAHOMA","Violent Crime",14786
+"OKLAHOMA","Murder Nonnegligent Manslaughter",163
+"OKLAHOMA","Rape",218
+"OKLAHOMA","Robbery",2906
+"OKLAHOMA","Aggravated Assault",10185
+"OKLAHOMA","Property Crime",107022
+"OKLAHOMA","Burglary",27445
+"OKLAHOMA","Larceny Theft",70018
+"OKLAHOMA","Motor Vehicle Theft",9559
+"OKLAHOMA","Arson",573
+"OREGON","Violent Crime",7332
+"OREGON","Murder Nonnegligent Manslaughter",45
+"OREGON","Rape",337
+"OREGON","Robbery",2158
+"OREGON","Aggravated Assault",4312
+"OREGON","Property Crime",97937
+"OREGON","Burglary",14628
+"OREGON","Larceny Theft",75616
+"OREGON","Motor Vehicle Theft",7693
+"OREGON","Arson",661
+"PENNSYLVANIA","Violent Crime",35864
+"PENNSYLVANIA","Murder Nonnegligent Manslaughter",498
+"PENNSYLVANIA","Rape",2754
+"PENNSYLVANIA","Robbery",13491
+"PENNSYLVANIA","Aggravated Assault",19121
+"PENNSYLVANIA","Property Crime",207075
+"PENNSYLVANIA","Burglary",37790
+"PENNSYLVANIA","Larceny Theft",157719
+"PENNSYLVANIA","Motor Vehicle Theft",11566
+"PENNSYLVANIA","Arson",928
+"RHODE ISLAND","Violent Crime",2642
+"RHODE ISLAND","Murder Nonnegligent Manslaughter",31
+"RHODE ISLAND","Rape",408
+"RHODE ISLAND","Robbery",678
+"RHODE ISLAND","Aggravated Assault",1525
+"RHODE ISLAND","Property Crime",25015
+"RHODE ISLAND","Burglary",5507
+"RHODE ISLAND","Larceny Theft",17360
+"RHODE ISLAND","Motor Vehicle Theft",2148
+"RHODE ISLAND","Arson",167
+"SOUTH CAROLINA","Violent Crime",9543
+"SOUTH CAROLINA","Murder Nonnegligent Manslaughter",120
+"SOUTH CAROLINA","Rape",785
+"SOUTH CAROLINA","Robbery",2113
+"SOUTH CAROLINA","Aggravated Assault",6525
+"SOUTH CAROLINA","Property Crime",76402
+"SOUTH CAROLINA","Burglary",13766
+"SOUTH CAROLINA","Larceny Theft",58146
+"SOUTH CAROLINA","Motor Vehicle Theft",4490
+"SOUTH CAROLINA","Arson",226
+"SOUTH DAKOTA","Violent Crime",1572
+"SOUTH DAKOTA","Murder Nonnegligent Manslaughter",6
+"SOUTH DAKOTA","Rape",337
+"SOUTH DAKOTA","Robbery",133
+"SOUTH DAKOTA","Aggravated Assault",1096
+"SOUTH DAKOTA","Property Crime",12113
+"SOUTH DAKOTA","Burglary",2212
+"SOUTH DAKOTA","Larceny Theft",9293
+"SOUTH DAKOTA","Motor Vehicle Theft",608
+"SOUTH DAKOTA","Arson",62
+"TENNESSEE","Violent Crime",30282
+"TENNESSEE","Murder Nonnegligent Manslaughter",261
+"TENNESSEE","Rape",1752
+"TENNESSEE","Robbery",6786
+"TENNESSEE","Aggravated Assault",21483
+"TENNESSEE","Property Crime",154441
+"TENNESSEE","Burglary",34695
+"TENNESSEE","Larceny Theft",111344
+"TENNESSEE","Motor Vehicle Theft",8402
+"TENNESSEE","Arson",737
+"TEXAS","Violent Crime",85917
+"TEXAS","Murder Nonnegligent Manslaughter",843
+"TEXAS","Rape",1484
+"TEXAS","Robbery",27177
+"TEXAS","Aggravated Assault",51497
+"TEXAS","Property Crime",699459
+"TEXAS","Burglary",143623
+"TEXAS","Larceny Theft",502618
+"TEXAS","Motor Vehicle Theft",53218
+"TEXAS","Arson",3142
+"UTAH","Violent Crime",4575
+"UTAH","Murder Nonnegligent Manslaughter",32
+"UTAH","Rape",968
+"UTAH","Robbery",928
+"UTAH","Aggravated Assault",2555
+"UTAH","Property Crime",58319
+"UTAH","Burglary",9107
+"UTAH","Larceny Theft",45016
+"UTAH","Motor Vehicle Theft",5167
+"UTAH","Arson",140
+"VERMONT","Violent Crime",314
+"VERMONT","Murder Nonnegligent Manslaughter",2
+"VERMONT","Rape",33
+"VERMONT","Robbery",38
+"VERMONT","Aggravated Assault",241
+"VERMONT","Property Crime",5739
+"VERMONT","Burglary",1173
+"VERMONT","Larceny Theft",4410
+"VERMONT","Motor Vehicle Theft",156
+"VERMONT","Arson",18
+"VIRGINIA","Violent Crime",9632
+"VIRGINIA","Murder Nonnegligent Manslaughter",193
+"VIRGINIA","Rape",1031
+"VIRGINIA","Robbery",3015
+"VIRGINIA","Aggravated Assault",5393
+"VIRGINIA","Property Crime",90892
+"VIRGINIA","Burglary",15006
+"VIRGINIA","Larceny Theft",71044
+"VIRGINIA","Motor Vehicle Theft",4842
+"VIRGINIA","Arson",485
+"WASHINGTON","Violent Crime",15006
+"WASHINGTON","Murder Nonnegligent Manslaughter",100
+"WASHINGTON","Rape",1218
+"WASHINGTON","Robbery",5019
+"WASHINGTON","Aggravated Assault",8235
+"WASHINGTON","Property Crime",192461
+"WASHINGTON","Burglary",37927
+"WASHINGTON","Larceny Theft",132417
+"WASHINGTON","Motor Vehicle Theft",22117
+"WASHINGTON","Arson",758
+"WEST VIRGINIA","Violent Crime",917
+"WEST VIRGINIA","Murder Nonnegligent Manslaughter",6
+"WEST VIRGINIA","Rape",91
+"WEST VIRGINIA","Robbery",141
+"WEST VIRGINIA","Aggravated Assault",679
+"WEST VIRGINIA","Property Crime",7842
+"WEST VIRGINIA","Burglary",1442
+"WEST VIRGINIA","Larceny Theft",6133
+"WEST VIRGINIA","Motor Vehicle Theft",267
+"WEST VIRGINIA","Arson",54
+"WISCONSIN","Violent Crime",14192
+"WISCONSIN","Murder Nonnegligent Manslaughter",143
+"WISCONSIN","Rape",677
+"WISCONSIN","Robbery",4702
+"WISCONSIN","Aggravated Assault",8127
+"WISCONSIN","Property Crime",103899
+"WISCONSIN","Burglary",18574
+"WISCONSIN","Larceny Theft",78894
+"WISCONSIN","Motor Vehicle Theft",6431
+"WISCONSIN","Arson",576
+"WYOMING","Violent Crime",803
+"WYOMING","Murder Nonnegligent Manslaughter",6
+"WYOMING","Rape",0
+"WYOMING","Robbery",70
+"WYOMING","Aggravated Assault",633
+"WYOMING","Property Crime",10205
+"WYOMING","Burglary",1422
+"WYOMING","Larceny Theft",8375
+"WYOMING","Motor Vehicle Theft",408
+"WYOMING","Arson",28
