@@ -1,6 +1,0 @@
-Notes to self:
-To change the cover picture, change background-image in css/styles.css and assets/scss/breakpoints/_mobileup.scss
-
-To execute, use gulp
-
-Deploy _site to Github Pages (haven't test)
