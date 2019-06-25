@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Tensorflow 2.0 / Keras - LSTM vs GRU Hidden States</title>
+    
+    <!-- Jekyll SEO tag auto-generated -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Tensorflow 2.0 / Keras - LSTM vs GRU Hidden States | Tiew Kee Hui’s Blog</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Tensorflow 2.0 / Keras - LSTM vs GRU Hidden States" />
+<meta name="author" content="Tiew Kee Hui" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I was going through the Neural Machine Translation with Attention tutorial for Tensorflow 2.0. Having gone through the verbal and visual explanations by Jalammar and also a plethora of other sites, I decided it was time to get my hands dirty with actual Tensorflow code." />
+<meta property="og:description" content="I was going through the Neural Machine Translation with Attention tutorial for Tensorflow 2.0. Having gone through the verbal and visual explanations by Jalammar and also a plethora of other sites, I decided it was time to get my hands dirty with actual Tensorflow code." />
+<link rel="canonical" href="https://tiewkh.github.io//blog/gru-hidden-state/" />
+<meta property="og:url" content="https://tiewkh.github.io//blog/gru-hidden-state/" />
+<meta property="og:site_name" content="Tiew Kee Hui’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-25T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"I was going through the Neural Machine Translation with Attention tutorial for Tensorflow 2.0. Having gone through the verbal and visual explanations by Jalammar and also a plethora of other sites, I decided it was time to get my hands dirty with actual Tensorflow code.","author":{"@type":"Person","name":"Tiew Kee Hui"},"@type":"BlogPosting","url":"https://tiewkh.github.io//blog/gru-hidden-state/","headline":"Tensorflow 2.0 / Keras - LSTM vs GRU Hidden States","dateModified":"2019-06-25T00:00:00+08:00","datePublished":"2019-06-25T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://tiewkh.github.io//blog/gru-hidden-state/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Open Graph Meta -->
+    <meta content="Tiew Kee Hui's Blog" property="og:site_name">
+    
+      <meta content="Tensorflow 2.0 / Keras - LSTM vs GRU Hidden States" property="og:title">
+    
+    
+      <meta content="article" property="og:type">
+    
+    
+      <meta content="Tiew Kee Hui's blog about his data science projects & knowledge, portfolio and occasional games achievements. Most of the posts will be related to artificial intelligence (AI), machine learning and their algorithms." property="og:description">
+    
+    
+      <meta content="https://tiewkh.github.io//blog/gru-hidden-state/" property="og:url">
+    
+    
+      <meta content="2019-06-25T00:00:00+08:00" property="article:published_time">
+      <meta content="https://tiewkh.github.io//about/" property="article:author">
+    
+    
+      <meta content="https://tiewkh.github.io//assets/img/dinosaur.jpg" property="og:image">
+    
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+    
+      <meta name="twitter:title" content="Tensorflow 2.0 / Keras - LSTM vs GRU Hidden States">
+    
+    
+      <meta name="twitter:url" content="https://tiewkh.github.io//blog/gru-hidden-state/">
+    
+    
+      <meta name="twitter:description" content="Tiew Kee Hui's blog about his data science projects & knowledge, portfolio and occasional games achievements. Most of the posts will be related to artificial intelligence (AI), machine learning and their algorithms.">
+    
+    
+      <meta name="twitter:image:src" content="https://tiewkh.github.io//assets/img/dinosaur.jpg">
+    
+
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+
+    <!-- Come and get me RSS readers -->
+    <link rel="alternate" type="application/rss+xml" title="Tiew Kee Hui's Blog" href="https://tiewkh.github.io//feed.xml" />
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie.css"><![endif]-->
+    <link rel="canonical" href="https://tiewkh.github.io//blog/gru-hidden-state/">
+
+    <!-- Modernizr -->
+    <script src="/assets/js/modernizr.custom.15390.js" type="text/javascript"></script>
+
+     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-113305033-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+ 
+</head>
+
+
+<body>
+
+    <div class="header">
+     <div class="container">
+         <h1 class="logo"><a href="/">Tiew Kee Hui's Blog</a></h1>
+         <nav class="nav-collapse">
+             <ul class="noList">
+                 
+                 <li class="element first  ">
+                     <a href="/index.html">Home</a>
+                 </li> 
+                 
+                 <li class="element   ">
+                     <a href="/archive">Archive</a>
+                 </li> 
+                 
+                 <li class="element   ">
+                     <a href="/about">About</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/contact">Contact</a>
+                 </li> 
+                 
+                 <!-- <li> <a href="https://github.com/brianmaierjr/long-haul" target="_blank">GitHub</a></li> -->
+             </ul>
+         </nav>
+     </div>
+ </div><!-- end .header -->
+
+
+   <div class="content">
+      <div class="container">
+         <div class="post">
+  
+  <h1 class="postTitle">Tensorflow 2.0 / Keras - LSTM vs GRU Hidden States</h1>
+  <p class="meta">June 25, 2019 | <span class="time">5</span> Minute Read</p>
+  
+  <p>I was going through the <a href="https://www.tensorflow.org/beta/tutorials/text/nmt_with_attention">Neural Machine Translation with Attention</a> tutorial for Tensorflow 2.0. Having gone through the verbal and visual explanations by <a href="http://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/">Jalammar</a> and also a plethora of other sites, I decided it was time to get my hands dirty with actual Tensorflow code.</p>
+
+<p>I had previously done a bit of coding related to CNNs for my Final Year Project, but this was my first experience with RNNs. I had learnt the theory of RNNs and its mainstream relatives, LSTM and GRU, but this was my first time looking at the code. The first thing that got me stumped was the hidden states in the Encoder class.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Encoder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">enc_units</span><span class="p">,</span> <span class="n">batch_sz</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">Encoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">batch_sz</span> <span class="o">=</span> <span class="n">batch_sz</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">enc_units</span> <span class="o">=</span> <span class="n">enc_units</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gru</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enc_units</span><span class="p">,</span>
+                                   <span class="n">return_sequences</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                   <span class="n">return_state</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                   <span class="n">recurrent_initializer</span><span class="o">=</span><span class="s">'glorot_uniform'</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">hidden</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gru</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">initial_state</span> <span class="o">=</span> <span class="n">hidden</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">state</span>
+
+  <span class="k">def</span> <span class="nf">initialize_hidden_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_sz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc_units</span><span class="p">))</span></code></pre></figure>
+
+<p>The key here are the two arguments, return_sequences and return_state, which were both set to True. This will enable us to retrieve the output state and hidden state. Initially, I thought that the output state and the hidden state were the same. This was because my knowledge of LSTM and GRU were lacking.</p>
+
+<figure>
+	<img src="/assets/img/lstm_gru.png" alt="" /> 
+	<figcaption>Fig 1. - LSTM and GRU image <a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21">taken from TowardsDataScience</a></figcaption>
+</figure>
+
+<p>As we can see, LSTM has two outputs, the cell state on top, and the hidden state at the bottom. Meanwhile, GRU only has one output, the hidden state. After going through <a href="https://keras.io/layers/recurrent/">Keras’ documentation</a> (because Tensorflow 2.0’s documentation has not been fully updated), it is stated that:</p>
+
+<p>Output shape</p>
+
+<ul>
+  <li>
+    <p>if return_state: a list of tensors. The first tensor is the output. The remaining tensors are the last states, each with shape (batch_size, units). For example, the number of state tensors is 1 (for RNN and GRU) or 2 (for LSTM).</p>
+  </li>
+  <li>
+    <p>if return_sequences: 3D tensor with shape (batch_size, timesteps, units).</p>
+  </li>
+</ul>
+
+<p>A minimal example is available at <a href="https://machinelearningmastery.com/return-sequences-and-return-states-for-lstms-in-keras/">Understand the Difference Between Return Sequences and Return States for LSTMs in Keras</a> by Jason Brownlee. The code below  is extracted from the post linked above and is for LSTM.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Input</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">LSTM</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="n">inputs1</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">lstm1</span><span class="p">,</span> <span class="n">state_h</span><span class="p">,</span> <span class="n">state_c</span> <span class="o">=</span> <span class="n">LSTM</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">return_sequences</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">return_state</span><span class="o">=</span><span class="bp">True</span><span class="p">)(</span><span class="n">inputs1</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs1</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">lstm1</span><span class="p">,</span> <span class="n">state_h</span><span class="p">,</span> <span class="n">state_c</span><span class="p">])</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></code></pre></figure>
+
+<p>The output for that piece of code would be:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">array</span><span class="p">([[[</span><span class="o">-</span><span class="mf">0.02145359</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.0540871</span> <span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.09228823</span><span class="p">]]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span>
+ <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.09228823</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span>
+ <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.19803026</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)]</span>
+ </code></pre></figure>
+
+<p>However, when we use GRU, keep in mind that it has no cell state. It only has a hidden state.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Input</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">GRU</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="n">inputs1</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">GRU</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">return_sequences</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">return_state</span><span class="o">=</span><span class="bp">True</span><span class="p">)(</span><span class="n">inputs1</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs1</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">lstm1</span><span class="p">,</span> <span class="n">state_h</span><span class="p">,</span> <span class="n">state_c</span><span class="p">])</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></code></pre></figure>
+
+<p>The output for that piece of code would be:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">array</span><span class="p">([[[</span><span class="o">-</span><span class="mf">0.02145359</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.0540871</span> <span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.09228823</span><span class="p">]]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span>
+ <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.09228823</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)]</span></code></pre></figure>
+
+<p>Notice that the second array is the final hidden state, which is the same as the last value of the first array. The output from the GRU also has one less array because it does not have a cell state unlike LSTM.</p>
+
+<p>Now, pardon me as I get back to completing the tutorial.</p>
+
+
+  <!-- POST NAVIGATION -->
+  <div class="postNav clearfix">
+     
+      <a class="prev" href="/blog/json-by-create-date/"><span>&laquo;&nbsp;Editing Newest JSON File In A Directory</span>
+      
+    </a>
+      
+     
+  </div>
+</div>
+
+      </div>
+   </div><!-- end .content -->
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="footer">
+   <div class="container">
+      <p class="copy">&copy; 2019 Tiew Kee Hui Powered by <a href="http://jekyllrb.com">Jekyll</a></p>
+
+      <div class="footer-links"> 
+         <ul class="noList"> 
+            
+            
+            <li><a href="https://www.linkedin.com/in/tiewkh" style="margin-right:0.5em;">
+                <i class="fa fa-linkedin-square" style="font-size:1.5em;"></i>
+            </a></li>
+            
+            
+            <li><a href="https://github.com/tiewkh" style="margin-right:0.5em;">
+                <i class="fa fa-github" style="font-size:1.5em;"></i>
+            </a></li>
+            
+            
+            <li><a href="https://www.youtube.com/channel/UCHvLEzWeKMRyQlAsa5iDHJA" style="margin-right:0.5em;">
+                <i class="fa fa-youtube-play" style="font-size:1.5em;"></i>
+            </a></li>
+            
+            
+            <li><a href="mailto:tiewkeehui95@hotmail.com">
+                  <i class="fa fa-envelope-o" style="font-size:1.5em;"></i>
+            </a></li>
+            
+         </ul>
+      </div>
+   </div>
+</div><!-- end .footer -->
+
+
+   <!-- Add jQuery and other scripts -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src=""><\/script>')</script>
+<script src="/assets/js/dropcap.min.js"></script>
+<script src="/assets/js/responsive-nav.min.js"></script>
+<script src="/assets/js/scripts.js"></script>
+
+
+</body>
+
+</html>
