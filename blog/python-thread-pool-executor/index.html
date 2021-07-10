@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Shutting Down Python's ThreadPoolExecutor</title>
+    
+    <!-- Jekyll SEO tag auto-generated -->
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Shutting Down Python’s ThreadPoolExecutor | Tiew Kee Hui’s Blog</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Shutting Down Python’s ThreadPoolExecutor" />
+<meta name="author" content="Tiew Kee Hui" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="To cancel pending futures during shutdown of ThreadPoolExecutor for Python 3.7, 3.8 and 3.9" />
+<meta property="og:description" content="To cancel pending futures during shutdown of ThreadPoolExecutor for Python 3.7, 3.8 and 3.9" />
+<link rel="canonical" href="https://tiewkh.github.io//blog/python-thread-pool-executor/" />
+<meta property="og:url" content="https://tiewkh.github.io//blog/python-thread-pool-executor/" />
+<meta property="og:site_name" content="Tiew Kee Hui’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-12-11T00:00:00-06:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Tiew Kee Hui"},"url":"https://tiewkh.github.io//blog/python-thread-pool-executor/","description":"To cancel pending futures during shutdown of ThreadPoolExecutor for Python 3.7, 3.8 and 3.9","@type":"BlogPosting","headline":"Shutting Down Python’s ThreadPoolExecutor","dateModified":"2020-12-11T00:00:00-06:00","datePublished":"2020-12-11T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://tiewkh.github.io//blog/python-thread-pool-executor/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Open Graph Meta -->
+    <meta content="Tiew Kee Hui's Blog" property="og:site_name">
+    
+      <meta content="Shutting Down Python's ThreadPoolExecutor" property="og:title">
+    
+    
+      <meta content="article" property="og:type">
+    
+    
+      <meta content="To cancel pending futures during shutdown of ThreadPoolExecutor for Python 3.7, 3.8 and 3.9" property="og:description">
+    
+    
+      <meta content="https://tiewkh.github.io//blog/python-thread-pool-executor/" property="og:url">
+    
+    
+      <meta content="2020-12-11T00:00:00-06:00" property="article:published_time">
+      <meta content="https://tiewkh.github.io//about/" property="article:author">
+    
+    
+      <meta content="https://tiewkh.github.io//assets/img/dinosaur.jpg" property="og:image">
+    
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+    
+      <meta name="twitter:title" content="Shutting Down Python's ThreadPoolExecutor">
+    
+    
+      <meta name="twitter:url" content="https://tiewkh.github.io//blog/python-thread-pool-executor/">
+    
+    
+      <meta name="twitter:description" content="To cancel pending futures during shutdown of ThreadPoolExecutor for Python 3.7, 3.8 and 3.9">
+    
+    
+      <meta name="twitter:image:src" content="https://tiewkh.github.io//assets/img/dinosaur.jpg">
+    
+
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+
+    <!-- Come and get me RSS readers -->
+    <link rel="alternate" type="application/rss+xml" title="Tiew Kee Hui's Blog" href="https://tiewkh.github.io//feed.xml" />
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie.css"><![endif]-->
+    <link rel="canonical" href="https://tiewkh.github.io//blog/python-thread-pool-executor/">
+
+    <!-- Modernizr -->
+    <script src="/assets/js/modernizr.custom.15390.js" type="text/javascript"></script>
+
+     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-113305033-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+ 
+</head>
+
+
+<body>
+
+    <div class="header">
+     <div class="container">
+         <h1 class="logo"><a href="/">Tiew Kee Hui's Blog</a></h1>
+         <nav class="nav-collapse">
+             <ul class="noList">
+                 
+                 <li class="element first  ">
+                     <a href="/index.html">Home</a>
+                 </li> 
+                 
+                 <li class="element   ">
+                     <a href="/archive">Archive</a>
+                 </li> 
+                 
+                 <li class="element   ">
+                     <a href="/about">About</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/contact">Contact</a>
+                 </li> 
+                 
+                 <!-- <li> <a href="https://github.com/brianmaierjr/long-haul" target="_blank">GitHub</a></li> -->
+             </ul>
+         </nav>
+     </div>
+ </div><!-- end .header -->
+
+
+   <div class="content">
+      <div class="container">
+         <div class="post">
+  
+  <h1 class="postTitle">Shutting Down Python's ThreadPoolExecutor</h1>
+  <p class="meta">December 11, 2020 | <span class="time">14</span> Minute Read</p>
+  
+  <p>ThreadPoolExecutor is the recommended way to perform multithreading in Python. Multithreading is a way to speed up your application and is suitable for I/O bound tasks such as HTTP requests, database operations, etc.</p>
+
+<h1 id="introduction">Introduction</h1>
+<p>The simplest way to show how to use ThreadPoolExecutor is by example:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">as_completed</span><span class="p">,</span> <span class="n">ThreadPoolExecutor</span>
+
+<span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"I'm running in a thread: {num}"</span>
+
+<span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+        <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span></code></pre></figure>
+
+<p>The application above will print the statement “I’m running in a thread: “ with the number 1 to 10, which will most probably be out of order.</p>
+
+<h2 id="code-explanation">Code Explanation</h2>
+<p>First, we created a ThreadPoolExecutor with 2 threads. Then, we submit 10 tasks to the ThreadPoolExecutor with a for-in loop, and in turn receive Future objects which we store in a list. We then loop through the list of futures using the as_completed() function, which allows us to receive futures that complete first instead of going sequentially through the futures list. Finally, we obtain the result of the task() function by calling future.result() and print the outcome.</p>
+
+<h2 id="handling-exceptions">Handling Exceptions</h2>
+<p>The example above was super simple, but what if we need to do something more complicated like firing concurrent HTTP requests. There is a possibility that the code may hit Exceptions during runtime due to uncontrollable reasons i.e. network issues, configuration issues. We can put a try-except block to handle Exceptions, but <strong>what if we want to cancel all submitted tasks when a future fails?</strong></p>
+
+<h2 id="shutdown">Shutdown</h2>
+<p>There is a built in function for ThreadPoolExecutor called shutdown().</p>
+
+<p>In Python 3.7 and 3.8, shutdown() only stops the ThreadPoolExecutor from accepting new tasks. This means that if we submit all our tasks in one go at the beginning, and mid-way through a task fails which causes the future to return an Exception, other pending tasks that have not started running and are still in the executor’s job queue will NOT be cancelled.</p>
+
+<p>Fortunately, it was revamped in Python 3.9 to allow users to cancel pending tasks in the executor’s job queue.</p>
+
+<h3 id="python-37-and-38">Python 3.7 and 3.8</h3>
+<p>At the time of writing this blog post I was using Python 3.7.10 and Python 3.8.5.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+    <span class="n">executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></code></pre></figure>
+
+<p>In Python 3.7 and 3.8, shutdown() only accepts one boolean parameter, wait. When wait = True, Python will wait until all submitted tasks have finished running before shutting down the ThreadPoolExecutor.</p>
+
+<p>When wait = False, it will still behave in the same way. The only difference is that the call to executor.shutdown() will not block. The executor will continue running all pending tasks, but will not accept new tasks and will completely shut down after all tasks are ran. Meanwhile, the main thread continues with our script’s main execution flow.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">"Num is 5"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># To ensure this task doesn't complete too fast
+</span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"I'm running in a thread: {num}"</span>
+
+<span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{datetime.now()} - {n}"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{datetime.now()} - EXCEPTION! {e}"</span><span class="p">)</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{datetime.now()} - Run complete"</span><span class="p">)</span></code></pre></figure>
+
+<p>In the code example above, a ValueError exception will be raised when num = 5. After hitting the ValueError exception, the script will call shutdown().</p>
+
+<p>When wait = True, Python will wait for all futures after num = 5 to complete and print it out (almost) all at once.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">2021-07-10 11:42:15.382637 - I<span class="s1">'m running in a thread: 1
+2021-07-10 11:42:15.383645 - I'</span>m running <span class="k">in </span>a thread: 2
+2021-07-10 11:42:16.389649 - I<span class="s1">'m running in a thread: 4
+2021-07-10 11:42:16.389885 - EXCEPTION! Num is 5
+2021-07-10 11:42:18.397034 - I'</span>m running <span class="k">in </span>a thread: 3
+2021-07-10 11:42:18.397034 - I<span class="s1">'m running in a thread: 7
+2021-07-10 11:42:18.398046 - I'</span>m running <span class="k">in </span>a thread: 6
+2021-07-10 11:42:18.398046 - I<span class="s1">'m running in a thread: 9
+2021-07-10 11:42:18.399038 - I'</span>m running <span class="k">in </span>a thread: 8
+2021-07-10 11:42:18.400030 - Run <span class="nb">complete</span></code></pre></figure>
+
+<p>Since wait = True, after handling the ValueError exception, the main thread will wait for all tasks in the job queue to complete, before returning to the for-in loop to receive completed futures from as_completed() and to print out the results. Notice that the results printed after the ValueError exception are printed at approximately the same time.</p>
+
+<p>Meanwhile, when wait = False, Python will continue with the main thread’s execution flow.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">2021-07-10 11:46:00.282762 - I<span class="s1">'m running in a thread: 1
+2021-07-10 11:46:00.283760 - I'</span>m running <span class="k">in </span>a thread: 2
+2021-07-10 11:46:01.283596 - I<span class="s1">'m running in a thread: 4
+2021-07-10 11:46:01.284606 - EXCEPTION! Num is 5
+2021-07-10 11:46:01.286596 - I'</span>m running <span class="k">in </span>a thread: 3
+2021-07-10 11:46:02.285767 - I<span class="s1">'m running in a thread: 7
+2021-07-10 11:46:02.287289 - I'</span>m running <span class="k">in </span>a thread: 6
+2021-07-10 11:46:03.296363 - I<span class="s1">'m running in a thread: 9
+2021-07-10 11:46:03.297305 - I'</span>m running <span class="k">in </span>a thread: 8
+2021-07-10 11:46:03.299306 - Run <span class="nb">complete</span></code></pre></figure>
+
+<p>Since wait = False, after handling the ValueError exception, the main thread immediately continues with the script’s execution flow, which is to wait and receive completed futures from as_completed() and to print out the results. Notice that the results printed after the ValueError exception are printed as each future completes.</p>
+
+<p>You can check out the shutdown() code for <a href="https://github.com/python/cpython/blob/3.7/Lib/concurrent/futures/thread.py#L210-L216">Python 3.7</a> and <a href="https://github.com/python/cpython/blob/3.8/Lib/concurrent/futures/thread.py#L230-L236">Python 3.8</a> at GitHub.</p>
+
+<h3 id="python-39">Python 3.9</h3>
+<p>At the time of writing this blog post, I was using Python 3.9.5.</p>
+
+<p>In Python 3.9, an additional boolean parameter, cancel_futures, was added to shutdown(). This allows us to cancel pending futures in the queue that have not started running if any future fails mid-way through. However, there is a catch. If you use the as_completed() function, the script will be stuck indefinitely after calling executor.shutdown() because as_completed() is not triggered when a future is in the CANCELLED state.</p>
+
+<p>As you can see <a href="https://github.com/python/cpython/blob/302df02789d041a09760f86295ea6b4dcd81aa1d/Lib/concurrent/futures/_base.py#L227">here</a>, as_completed() only returns a future if it is in the CANCELLED_AND_NOTIFIED or FINISHED state. Meanwhile, <a href="https://github.com/python/cpython/blob/302df02789d041a09760f86295ea6b4dcd81aa1d/Lib/concurrent/futures/thread.py#L222">executor.shutdown() only cancels the future</a> but does not change its state to CANCELLED_AND_NOTIFIED.</p>
+
+<p>To confirm it, we can run this block of code below.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">"Num is 5"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># To ensure this task doesn't complete too fast
+</span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"I'm running in a thread: {num}"</span>
+
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">([</span><span class="n">f</span><span class="o">.</span><span class="n">_state</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{datetime.now()} - {n}"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{datetime.now()} - EXCEPTION! {e}"</span><span class="p">)</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cancel_futures</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{datetime.now()} - Run complete"</span><span class="p">)</span></code></pre></figure>
+
+<p>We are printing the states of all the futures every time we enter the for-in loop. The results of the block of code above is as shown below:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span><span class="s1">'RUNNING'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span><span class="o">]</span>
+2021-07-10 12:24:10.208194 - I<span class="s1">'m running in a thread: 2
+['</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>RUNNING<span class="s1">', '</span>RUNNING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">']
+2021-07-10 12:24:10.209194 - I'</span>m running <span class="k">in </span>a thread: 1
+<span class="o">[</span><span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span><span class="o">]</span>
+2021-07-10 12:24:11.212126 - I<span class="s1">'m running in a thread: 3
+['</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>RUNNING<span class="s1">', '</span>RUNNING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">']
+2021-07-10 12:24:11.213099 - EXCEPTION! Num is 5
+['</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>RUNNING<span class="s1">', '</span>RUNNING<span class="s1">', '</span>CANCELLED<span class="s1">', '</span>CANCELLED<span class="s1">']
+2021-07-10 12:24:11.215099 - I'</span>m running <span class="k">in </span>a thread: 4
+<span class="o">[</span><span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'CANCELLED'</span>, <span class="s1">'CANCELLED'</span><span class="o">]</span>
+2021-07-10 12:24:12.217437 - I<span class="s1">'m running in a thread: 7
+['</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>CANCELLED<span class="s1">', '</span>CANCELLED<span class="s1">']
+2021-07-10 12:24:12.218478 - I'</span>m running <span class="k">in </span>a thread: 6</code></pre></figure>
+
+<p>We can see that after the ValueError exception is handled, the last two futures changes state from PENDING to CANCELLED. The script will then be stuck because as_completed() never returns the remaining two futures.</p>
+
+<h3 id="what-to-do">What To Do</h3>
+<p>The way I fixed this is to scrap using the as_completed() function. Although it is the recommended way to loop through a list of futures, it’s useless if it causes the script to hang.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">"Num is 5"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># To ensure this task doesn't complete too fast
+</span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"I'm running in a thread: {num}"</span>
+
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">([</span><span class="n">f</span><span class="o">.</span><span class="n">_state</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">future</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
+            <span class="k">continue</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{datetime.now()} - {n}"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{datetime.now()} - EXCEPTION! {e}"</span><span class="p">)</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cancel_futures</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{datetime.now()} - Run complete"</span><span class="p">)</span></code></pre></figure>
+
+<p>Now, we are going through the list of futures sequentially. We are also checking if the future is in CANCELLED state and if it is, we proceed to the next future. We have successfully avoided the never-ending as_completed() function when .shutdown(cancel_futures=True) is called.</p>
+
+<p>The output of the code above will look like:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="o">[</span><span class="s1">'RUNNING'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span><span class="o">]</span>
+2021-07-10 12:46:30.983909 - I<span class="s1">'m running in a thread: 1
+['</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>RUNNING<span class="s1">', '</span>RUNNING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">']
+2021-07-10 12:46:30.986902 - I'</span>m running <span class="k">in </span>a thread: 2
+<span class="o">[</span><span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span><span class="o">]</span>
+2021-07-10 12:46:32.002421 - I<span class="s1">'m running in a thread: 3
+['</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>RUNNING<span class="s1">', '</span>RUNNING<span class="s1">', '</span>PENDING<span class="s1">', '</span>PENDING<span class="s1">']
+2021-07-10 12:46:32.004655 - I'</span>m running <span class="k">in </span>a thread: 4
+<span class="o">[</span><span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'PENDING'</span>, <span class="s1">'PENDING'</span><span class="o">]</span>
+2021-07-10 12:46:32.006840 - EXCEPTION! Num is 5
+<span class="o">[</span><span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'RUNNING'</span>, <span class="s1">'CANCELLED'</span>, <span class="s1">'CANCELLED'</span><span class="o">]</span>
+2021-07-10 12:46:33.008187 - I<span class="s1">'m running in a thread: 6
+['</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>FINISHED<span class="s1">', '</span>CANCELLED<span class="s1">', '</span>CANCELLED<span class="s1">']
+2021-07-10 12:46:33.010195 - I'</span>m running <span class="k">in </span>a thread: 7
+<span class="o">[</span><span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'CANCELLED'</span>, <span class="s1">'CANCELLED'</span><span class="o">]</span>
+<span class="o">[</span><span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'FINISHED'</span>, <span class="s1">'CANCELLED'</span>, <span class="s1">'CANCELLED'</span><span class="o">]</span>
+2021-07-10 12:46:33.013183 - Run <span class="nb">complete</span></code></pre></figure>
+
+<h3 id="bonus-i-want-to-cancel-futures-on-shutdown-in-python-37-and-38">Bonus: I Want To Cancel Futures On Shutdown in Python 3.7 and 3.8</h3>
+<p>With a bit of knowledge of object-oriented programming, we can! Simply inherit the ThreadPoolExecutor class and add a new method (in case we still want the original shutdown()) with <a href="https://github.com/python/cpython/blob/302df02789d041a09760f86295ea6b4dcd81aa1d/Lib/concurrent/futures/thread.py#L210-L229">Python 3.9’s version of shutdown().</a></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+
+<span class="k">class</span> <span class="nc">CustomThreadPoolExecutor</span><span class="p">(</span><span class="n">ThreadPoolExecutor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">shutdown39</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cancel_futures</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shutdown_lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_shutdown</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="n">cancel_futures</span><span class="p">:</span>
+                <span class="c1"># Drain all work items from the queue, and then cancel their
+</span>                <span class="c1"># associated futures.
+</span>                <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">work_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_work_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="k">if</span> <span class="n">work_item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">work_item</span><span class="o">.</span><span class="n">future</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+
+            <span class="c1"># Send a wake-up to prevent threads calling
+</span>            <span class="c1"># _work_queue.get(block=True) from permanently blocking.
+</span>            <span class="bp">self</span><span class="o">.</span><span class="n">_work_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">wait</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span><span class="p">:</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></code></pre></figure>
+
+
+  <!-- POST NAVIGATION -->
+  <div class="postNav clearfix">
+     
+      <a class="prev" href="/blog/mysql-docker/"><span>&laquo;&nbsp;Populating MySQL Docker Image</span>
+      
+    </a>
+      
+     
+  </div>
+</div>
+
+      </div>
+   </div><!-- end .content -->
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="footer">
+   <div class="container">
+      <p class="copy">&copy; 2021 Tiew Kee Hui Powered by <a href="http://jekyllrb.com">Jekyll</a></p>
+
+      <div class="footer-links"> 
+         <ul class="noList"> 
+            
+            
+            <li><a href="https://www.linkedin.com/in/tiewkh" style="margin-right:0.5em;">
+                <i class="fa fa-linkedin-square" style="font-size:1.5em;"></i>
+            </a></li>
+            
+            
+            <li><a href="https://github.com/tiewkh" style="margin-right:0.5em;">
+                <i class="fa fa-github" style="font-size:1.5em;"></i>
+            </a></li>
+            
+            <!--
+            
+            -->
+            
+            <li><a href="mailto:tiewkeehui95@hotmail.com">
+                  <i class="fa fa-envelope-o" style="font-size:1.5em;"></i>
+            </a></li>
+            
+         </ul>
+      </div>
+   </div>
+</div><!-- end .footer -->
+
+
+   <!-- Add jQuery and other scripts -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src=""><\/script>')</script>
+<script src="/assets/js/dropcap.min.js"></script>
+<script src="/assets/js/responsive-nav.min.js"></script>
+<script src="/assets/js/scripts.js"></script>
+
+
+</body>
+
+</html>

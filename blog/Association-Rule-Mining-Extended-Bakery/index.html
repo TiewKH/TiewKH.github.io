@@ -24,9 +24,9 @@
 <meta property="og:url" content="https://tiewkh.github.io//blog/Association-Rule-Mining-Extended-Bakery/" />
 <meta property="og:site_name" content="Tiew Kee Hui’s Blog" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2017-01-30T00:00:00+08:00" />
+<meta property="article:published_time" content="2017-01-30T00:00:00-06:00" />
 <script type="application/ld+json">
-{"description":"Association rule mining exercise conducted on the Extended Bakery dataset. This post includes the motivation of this exercise and the R code to determine which products to sell together based on association rule mining.","author":{"@type":"Person","name":"Tiew Kee Hui"},"@type":"BlogPosting","url":"https://tiewkh.github.io//blog/Association-Rule-Mining-Extended-Bakery/","headline":"Association Rule Mining on the Extended Bakery dataset","dateModified":"2017-01-30T00:00:00+08:00","datePublished":"2017-01-30T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://tiewkh.github.io//blog/Association-Rule-Mining-Extended-Bakery/"},"@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Tiew Kee Hui"},"url":"https://tiewkh.github.io//blog/Association-Rule-Mining-Extended-Bakery/","description":"Association rule mining exercise conducted on the Extended Bakery dataset. This post includes the motivation of this exercise and the R code to determine which products to sell together based on association rule mining.","@type":"BlogPosting","headline":"Association Rule Mining on the Extended Bakery dataset","dateModified":"2017-01-30T00:00:00-06:00","datePublished":"2017-01-30T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://tiewkh.github.io//blog/Association-Rule-Mining-Extended-Bakery/"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -45,7 +45,7 @@
       <meta content="https://tiewkh.github.io//blog/Association-Rule-Mining-Extended-Bakery/" property="og:url">
     
     
-      <meta content="2017-01-30T00:00:00+08:00" property="article:published_time">
+      <meta content="2017-01-30T00:00:00-06:00" property="article:published_time">
       <meta content="https://tiewkh.github.io//about/" property="article:author">
     
     
@@ -135,7 +135,7 @@ ga('send', 'pageview');
          <div class="post">
   
   <h1 class="postTitle">Association Rule Mining on the Extended Bakery dataset</h1>
-  <p class="meta">January 30, 2017 | <span class="time">46</span> Minute Read</p>
+  <p class="meta">January 30, 2017 | <span class="time">48</span> Minute Read</p>
   
   <p class="intro">
 <h2>
@@ -271,43 +271,63 @@ ga('send', 'pageview');
 
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##   V1 V2 V3 V4 V5 V6 V7 V8 V9</span><span class="w">
-</span><span class="c1">## 1  1 11 21 NA NA NA NA NA NA</span><span class="w">
-</span><span class="c1">## 2  2  7 11 37 45 NA NA NA NA</span><span class="w">
-</span><span class="c1">## 3  3  3 33 42 NA NA NA NA NA</span><span class="w">
-</span><span class="c1">## 4  4  5 12 17 47 NA NA NA NA</span><span class="w">
-</span><span class="c1">## 5  5  6 18 42 NA NA NA NA NA</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##   V1 V2 V3 V4 V5 V6 V7 V8 V9
+</span><span class="w">
+</span><span class="c1">## 1  1 11 21 NA NA NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 2  2  7 11 37 45 NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 3  3  3 33 42 NA NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 4  4  5 12 17 47 NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 5  5  6 18 42 NA NA NA NA NA
+</span><span class="w">
 </span><span class="c1">## 6  6  2  4 34 NA NA NA NA NA</span></code></pre></figure>
 
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Check which receipt only has one item</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Check which receipt only has one item
+</span><span class="w">
 </span><span class="n">removedReceipts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">is.na</span><span class="p">(</span><span class="n">bakery</span><span class="o">$</span><span class="n">V</span><span class="m">3</span><span class="p">)</span><span class="w">
 </span><span class="n">bakery</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">bakery</span><span class="p">[</span><span class="o">!</span><span class="n">removedReceipts</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w">
 </span><span class="n">head</span><span class="p">(</span><span class="n">bakery</span><span class="p">)</span></code></pre></figure>
 
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##   V1 V2 V3 V4 V5 V6 V7 V8 V9</span><span class="w">
-</span><span class="c1">## 1  1 11 21 NA NA NA NA NA NA</span><span class="w">
-</span><span class="c1">## 2  2  7 11 37 45 NA NA NA NA</span><span class="w">
-</span><span class="c1">## 3  3  3 33 42 NA NA NA NA NA</span><span class="w">
-</span><span class="c1">## 4  4  5 12 17 47 NA NA NA NA</span><span class="w">
-</span><span class="c1">## 5  5  6 18 42 NA NA NA NA NA</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##   V1 V2 V3 V4 V5 V6 V7 V8 V9
+</span><span class="w">
+</span><span class="c1">## 1  1 11 21 NA NA NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 2  2  7 11 37 45 NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 3  3  3 33 42 NA NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 4  4  5 12 17 47 NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 5  5  6 18 42 NA NA NA NA NA
+</span><span class="w">
 </span><span class="c1">## 6  6  2  4 34 NA NA NA NA NA</span></code></pre></figure>
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Removing the first column (Receipt ID)</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Removing the first column (Receipt ID)
+</span><span class="w">
 </span><span class="n">bakery</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">bakery</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="n">num</span><span class="p">]</span><span class="w">
 </span><span class="n">head</span><span class="p">(</span><span class="n">bakery</span><span class="p">)</span></code></pre></figure>
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##   V2 V3 V4 V5 V6 V7 V8 V9</span><span class="w">
-</span><span class="c1">## 1 11 21 NA NA NA NA NA NA</span><span class="w">
-</span><span class="c1">## 2  7 11 37 45 NA NA NA NA</span><span class="w">
-</span><span class="c1">## 3  3 33 42 NA NA NA NA NA</span><span class="w">
-</span><span class="c1">## 4  5 12 17 47 NA NA NA NA</span><span class="w">
-</span><span class="c1">## 5  6 18 42 NA NA NA NA NA</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##   V2 V3 V4 V5 V6 V7 V8 V9
+</span><span class="w">
+</span><span class="c1">## 1 11 21 NA NA NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 2  7 11 37 45 NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 3  3 33 42 NA NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 4  5 12 17 47 NA NA NA NA
+</span><span class="w">
+</span><span class="c1">## 5  6 18 42 NA NA NA NA NA
+</span><span class="w">
 </span><span class="c1">## 6  2  4 34 NA NA NA NA NA</span></code></pre></figure>
 
 
@@ -325,7 +345,8 @@ ga('send', 'pageview');
 
 <figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">food</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s1">'food.csv'</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">col.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'FoodId'</span><span class="p">,</span><span class="w"> </span><span class="s1">'FoodName'</span><span class="p">),</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">','</span><span class="p">)</span><span class="w">
 
-</span><span class="c1">#Change the food ID to the food name</span><span class="w">
+</span><span class="c1">#Change the food ID to the food name
+</span><span class="w">
 </span><span class="n">newBakery</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">lapply</span><span class="p">(</span><span class="n">bakery</span><span class="p">,</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">food</span><span class="o">$</span><span class="n">FoodName</span><span class="p">[</span><span class="n">match</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">food</span><span class="o">$</span><span class="n">FoodId</span><span class="p">)]}))</span><span class="w">
 
 </span><span class="n">write.table</span><span class="p">(</span><span class="n">newBakery</span><span class="p">,</span><span class="w"> </span><span class="s1">'foodUpdated.csv'</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">','</span><span class="p">,</span><span class="w"> </span><span class="n">col.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">row.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">na</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w">
@@ -333,19 +354,32 @@ ga('send', 'pageview');
 </span><span class="n">head</span><span class="p">(</span><span class="n">newBakery</span><span class="p">)</span></code></pre></figure>
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##                 V2               V3                  V4</span><span class="w">
-</span><span class="c1">## 1        Apple Pie   Ganache Cookie                &lt;NA&gt;</span><span class="w">
-</span><span class="c1">## 2    Coffee Eclair        Apple Pie        Almond Twist</span><span class="w">
-</span><span class="c1">## 3       Opera Cake Cheese Croissant        Orange Juice</span><span class="w">
-</span><span class="c1">## 4     Truffle Cake       Apple Tart      Chocolate Tart</span><span class="w">
-</span><span class="c1">## 5 Chocolate Eclair      Cherry Tart        Orange Juice</span><span class="w">
-</span><span class="c1">## 6      Casino Cake  Strawberry Cake Chocolate Croissant</span><span class="w">
-</span><span class="c1">##                    V5   V6   V7   V8   V9</span><span class="w">
-</span><span class="c1">## 1                &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</span><span class="w">
-</span><span class="c1">## 2          Hot Coffee &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</span><span class="w">
-</span><span class="c1">## 3                &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</span><span class="w">
-</span><span class="c1">## 4 Vanilla Frappuccino &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</span><span class="w">
-</span><span class="c1">## 5                &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##                 V2               V3                  V4
+</span><span class="w">
+</span><span class="c1">## 1        Apple Pie   Ganache Cookie                &lt;NA&gt;
+</span><span class="w">
+</span><span class="c1">## 2    Coffee Eclair        Apple Pie        Almond Twist
+</span><span class="w">
+</span><span class="c1">## 3       Opera Cake Cheese Croissant        Orange Juice
+</span><span class="w">
+</span><span class="c1">## 4     Truffle Cake       Apple Tart      Chocolate Tart
+</span><span class="w">
+</span><span class="c1">## 5 Chocolate Eclair      Cherry Tart        Orange Juice
+</span><span class="w">
+</span><span class="c1">## 6      Casino Cake  Strawberry Cake Chocolate Croissant
+</span><span class="w">
+</span><span class="c1">##                    V5   V6   V7   V8   V9
+</span><span class="w">
+</span><span class="c1">## 1                &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
+</span><span class="w">
+</span><span class="c1">## 2          Hot Coffee &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
+</span><span class="w">
+</span><span class="c1">## 3                &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
+</span><span class="w">
+</span><span class="c1">## 4 Vanilla Frappuccino &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
+</span><span class="w">
+</span><span class="c1">## 5                &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
+</span><span class="w">
 </span><span class="c1">## 6                &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</span></code></pre></figure>
 
 </div>
@@ -353,298 +387,576 @@ ga('send', 'pageview');
 <h2>Rule Mining Process</h2>
 <p>Since the dataset is still quite small, the Apriori algorithm would be enough to generate our rules rather than the FP tree. We want to generate rules with somewhat high confidence and applicable to a small crowd of people. The parameters for our algorithm is a minimum support of 0.02 (1428 receipts) and a minimum confidence of 0.5. We set the minimum length of the rule to be 2 to ensure that there are at least 2 items involved for all the rules generated. The algorithm generated 116 rules and completed all the processing in 0.07s in our local computer.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Read it as a transaction file</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Read it as a transaction file
+</span><span class="w">
 </span><span class="n">transactions</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.transactions</span><span class="p">(</span><span class="s2">"foodUpdated.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">","</span><span class="p">)</span><span class="w">
 
 </span><span class="n">rules</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">apriori</span><span class="p">(</span><span class="n">transactions</span><span class="p">,</span><span class="w"> </span><span class="n">parameter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">sup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.02</span><span class="p">,</span><span class="w"> </span><span class="n">conf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">minlen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="o">=</span><span class="s2">"rules"</span><span class="p">))</span></code></pre></figure>
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">## Apriori</span><span class="w">
-</span><span class="c1">## </span><span class="w">
-</span><span class="c1">## Parameter specification:</span><span class="w">
-</span><span class="c1">##  confidence minval smax arem  aval originalSupport maxtime support minlen</span><span class="w">
-</span><span class="c1">##         0.5    0.1    1 none FALSE            TRUE       5    0.02      2</span><span class="w">
-</span><span class="c1">##  maxlen target   ext</span><span class="w">
-</span><span class="c1">##      10  rules FALSE</span><span class="w">
-</span><span class="c1">## </span><span class="w">
-</span><span class="c1">## Algorithmic control:</span><span class="w">
-</span><span class="c1">##  filter tree heap memopt load sort verbose</span><span class="w">
-</span><span class="c1">##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE</span><span class="w">
-</span><span class="c1">## </span><span class="w">
-</span><span class="c1">## Absolute minimum support count: 1428 </span><span class="w">
-</span><span class="c1">## </span><span class="w">
-</span><span class="c1">## set item appearances ...[0 item(s)] done [0.00s].</span><span class="w">
-</span><span class="c1">## set transactions ...[50 item(s), 71408 transaction(s)] done [0.02s].</span><span class="w">
-</span><span class="c1">## sorting and recoding items ... [50 item(s)] done [0.00s].</span><span class="w">
-</span><span class="c1">## creating transaction tree ... done [0.03s].</span><span class="w">
-</span><span class="c1">## checking subsets of size 1 2 3 4 5 done [0.01s].</span><span class="w">
-</span><span class="c1">## writing ... [116 rule(s)] done [0.00s].</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">## Apriori
+</span><span class="w">
+</span><span class="c1">## 
+</span><span class="w">
+</span><span class="c1">## Parameter specification:
+</span><span class="w">
+</span><span class="c1">##  confidence minval smax arem  aval originalSupport maxtime support minlen
+</span><span class="w">
+</span><span class="c1">##         0.5    0.1    1 none FALSE            TRUE       5    0.02      2
+</span><span class="w">
+</span><span class="c1">##  maxlen target   ext
+</span><span class="w">
+</span><span class="c1">##      10  rules FALSE
+</span><span class="w">
+</span><span class="c1">## 
+</span><span class="w">
+</span><span class="c1">## Algorithmic control:
+</span><span class="w">
+</span><span class="c1">##  filter tree heap memopt load sort verbose
+</span><span class="w">
+</span><span class="c1">##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+</span><span class="w">
+</span><span class="c1">## 
+</span><span class="w">
+</span><span class="c1">## Absolute minimum support count: 1428 
+</span><span class="w">
+</span><span class="c1">## 
+</span><span class="w">
+</span><span class="c1">## set item appearances ...[0 item(s)] done [0.00s].
+</span><span class="w">
+</span><span class="c1">## set transactions ...[50 item(s), 71408 transaction(s)] done [0.02s].
+</span><span class="w">
+</span><span class="c1">## sorting and recoding items ... [50 item(s)] done [0.00s].
+</span><span class="w">
+</span><span class="c1">## creating transaction tree ... done [0.03s].
+</span><span class="w">
+</span><span class="c1">## checking subsets of size 1 2 3 4 5 done [0.01s].
+</span><span class="w">
+</span><span class="c1">## writing ... [116 rule(s)] done [0.00s].
+</span><span class="w">
 </span><span class="c1">## creating S4 object  ... done [0.01s].</span></code></pre></figure>
 
 <p>Seems like there are 116 rules generated. Now, to remove redundant rules (if any).</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Remove redundant rules (if any)</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Remove redundant rules (if any)
+</span><span class="w">
 </span><span class="n">redundant</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">is.redundant</span><span class="p">(</span><span class="n">rules</span><span class="p">,</span><span class="w"> </span><span class="n">measure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"confidence"</span><span class="p">)</span><span class="w">
 </span><span class="n">rules</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rules</span><span class="p">[</span><span class="o">!</span><span class="n">redundant</span><span class="p">]</span><span class="w">
 </span><span class="n">inspect</span><span class="p">(</span><span class="n">sort</span><span class="p">(</span><span class="n">rules</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"lift"</span><span class="p">))</span></code></pre></figure>
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##       lhs                      rhs                      support confidence      lift</span><span class="w">
-</span><span class="c1">## [1]   {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02177627  1.0000000 14.281600</span><span class="w">
-</span><span class="c1">## [2]   {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02177627  1.0000000 14.250249</span><span class="w">
-</span><span class="c1">## [3]   {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02179028  0.9974359 14.244981</span><span class="w">
-</span><span class="c1">## [4]   {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02684573  0.9973985 14.244447</span><span class="w">
-</span><span class="c1">## [5]   {Apple Danish,                                                                </span><span class="w">
-</span><span class="c1">##        Apple Tart,                                                                  </span><span class="w">
-</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Croissant}     0.02162223  0.9929260 14.228951</span><span class="w">
-</span><span class="c1">## [6]   {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02177627  0.9980745 14.222810</span><span class="w">
-</span><span class="c1">## [7]   {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Cookie}    0.02177627  0.9942455 14.199417</span><span class="w">
-</span><span class="c1">## [8]   {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02179028  0.9942492 14.168299</span><span class="w">
-</span><span class="c1">## [9]   {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Lemonade}  0.02177627  0.9942455 14.168247</span><span class="w">
-</span><span class="c1">## [10]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02177627  0.9993573 14.161958</span><span class="w">
-</span><span class="c1">## [11]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02177627  0.9904459 14.145152</span><span class="w">
-</span><span class="c1">## [12]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02684573  0.9922360 14.139611</span><span class="w">
-</span><span class="c1">## [13]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02177627  1.0000000 14.129007</span><span class="w">
-</span><span class="c1">## [14]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02177627  0.9967949 14.125646</span><span class="w">
-</span><span class="c1">## [15]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Lemonade}      0.02177627  0.9980745 14.101801</span><span class="w">
-</span><span class="c1">## [16]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02177627  0.9942455 14.089519</span><span class="w">
-</span><span class="c1">## [17]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Cookie}        0.02177627  0.9936102 14.080516</span><span class="w">
-</span><span class="c1">## [18]  {Apple Croissant,                                                             </span><span class="w">
-</span><span class="c1">##        Apple Tart,                                                                  </span><span class="w">
-</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Danish}        0.02162223  0.9910141 14.077250</span><span class="w">
-</span><span class="c1">## [19]  {Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02684573  0.9927499 14.068324</span><span class="w">
-</span><span class="c1">## [20]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02684573  0.9953271 14.062983</span><span class="w">
-</span><span class="c1">## [21]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02179028  0.9948849 14.056736</span><span class="w">
-</span><span class="c1">## [22]  {Apple Croissant,                                                             </span><span class="w">
-</span><span class="c1">##        Apple Danish,                                                                </span><span class="w">
-</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Tart}          0.02162223  0.9897436 14.017376</span><span class="w">
-</span><span class="c1">## [23]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02177627  0.9904459 13.994016</span><span class="w">
-</span><span class="c1">## [24]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Cookie}    0.02705579  0.9261745 13.227254</span><span class="w">
-</span><span class="c1">## [25]  {Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02704179  0.9248084 13.207744</span><span class="w">
-</span><span class="c1">## [26]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02697177  0.9228558 13.179857</span><span class="w">
-</span><span class="c1">## [27]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02697177  0.9228558 13.150925</span><span class="w">
-</span><span class="c1">## [28]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Lemonade}  0.02691575  0.9213806 13.129904</span><span class="w">
-</span><span class="c1">## [29]  {Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02697177  0.9264069 13.128173</span><span class="w">
-</span><span class="c1">## [30]  {Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02704179  0.9288119 13.123190</span><span class="w">
-</span><span class="c1">## [31]  {Apple Danish,                                                                </span><span class="w">
-</span><span class="c1">##        Apple Tart}          =&gt; {Apple Croissant}     0.02678972  0.9157492 13.122981</span><span class="w">
-</span><span class="c1">## [32]  {Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02704179  0.9190861 13.097207</span><span class="w">
-</span><span class="c1">## [33]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Lemonade}      0.02705579  0.9257307 13.079655</span><span class="w">
-</span><span class="c1">## [34]  {Apple Tart,                                                                  </span><span class="w">
-</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Croissant}     0.02181828  0.9116442 13.064156</span><span class="w">
-</span><span class="c1">## [35]  {Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02691575  0.9204981 13.044439</span><span class="w">
-</span><span class="c1">## [36]  {Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Cookie}        0.02705579  0.9195621 13.031175</span><span class="w">
-</span><span class="c1">## [37]  {Apple Croissant,                                                             </span><span class="w">
-</span><span class="c1">##        Apple Tart}          =&gt; {Apple Danish}        0.02678972  0.9161877 13.014349</span><span class="w">
-</span><span class="c1">## [38]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02691575  0.9209391 13.011955</span><span class="w">
-</span><span class="c1">## [39]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02190231  0.9098313 12.993847</span><span class="w">
-</span><span class="c1">## [40]  {Apple Croissant,                                                             </span><span class="w">
-</span><span class="c1">##        Apple Danish}        =&gt; {Apple Tart}          0.02678972  0.9144359 12.950822</span><span class="w">
-</span><span class="c1">## [41]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02198633  0.9133217 12.942742</span><span class="w">
-</span><span class="c1">## [42]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Cookie}    0.02191631  0.9061957 12.941925</span><span class="w">
-</span><span class="c1">## [43]  {Apple Tart,                                                                  </span><span class="w">
-</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Danish}        0.02177627  0.9098888 12.924874</span><span class="w">
-</span><span class="c1">## [44]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie}        =&gt; {Raspberry Lemonade}  0.02198633  0.9069902 12.924836</span><span class="w">
-</span><span class="c1">## [45]  {Apple Croissant,                                                             </span><span class="w">
-</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Danish}        0.02184629  0.9085614 12.906019</span><span class="w">
-</span><span class="c1">## [46]  {Apple Danish,                                                                </span><span class="w">
-</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Croissant}     0.02184629  0.8991354 12.884901</span><span class="w">
-</span><span class="c1">## [47]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Lemonade}  0.02184629  0.9033005 12.872258</span><span class="w">
-</span><span class="c1">## [48]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie}        =&gt; {Raspberry Cookie}    0.02181828  0.9000578 12.854265</span><span class="w">
-</span><span class="c1">## [49]  {Apple Croissant,                                                             </span><span class="w">
-</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Tart}          0.02181828  0.9073966 12.851126</span><span class="w">
-</span><span class="c1">## [50]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02190231  0.9009217 12.838358</span><span class="w">
-</span><span class="c1">## [51]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade}      =&gt; {Lemon Cookie}        0.02190231  0.9056167 12.833553</span><span class="w">
-</span><span class="c1">## [52]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02184629  0.9075044 12.822135</span><span class="w">
-</span><span class="c1">## [53]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Lemon Cookie}        =&gt; {Lemon Lemonade}      0.02190231  0.9035240 12.765896</span><span class="w">
-</span><span class="c1">## [54]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Lemonade}      0.02191631  0.9014977 12.737267</span><span class="w">
-</span><span class="c1">## [55]  {Green Tea,                                                                   </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Cookie}        0.02181828  0.8974654 12.718042</span><span class="w">
-</span><span class="c1">## [56]  {Apple Danish,                                                                </span><span class="w">
-</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Tart}          0.02177627  0.8962536 12.693312</span><span class="w">
-</span><span class="c1">## [57]  {Apple Croissant,                                                             </span><span class="w">
-</span><span class="c1">##        Apple Danish,                                                                </span><span class="w">
-</span><span class="c1">##        Apple Tart}          =&gt; {Cherry Soda}         0.02162223  0.8071093 12.589353</span><span class="w">
-</span><span class="c1">## [58]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02177627  0.8111633 12.551148</span><span class="w">
-</span><span class="c1">## [59]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02177627  0.8090531 12.518497</span><span class="w">
-</span><span class="c1">## [60]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02177627  0.8073728 12.492498</span><span class="w">
-</span><span class="c1">## [61]  {Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02179028  0.8058001 12.468163</span><span class="w">
-</span><span class="c1">## [62]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Green Tea}           0.02177627  0.8048654 12.453701</span><span class="w">
-</span><span class="c1">## [63]  {Apple Pie,                                                                   </span><span class="w">
-</span><span class="c1">##        Coffee Eclair,                                                               </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Almond Twist}        0.02932445  0.9938301 12.385239</span><span class="w">
-</span><span class="c1">## [64]  {Almond Twist,                                                                </span><span class="w">
-</span><span class="c1">##        Coffee Eclair,                                                               </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Apple Pie}           0.02932445  0.9928876 12.375654</span><span class="w">
-</span><span class="c1">## [65]  {Vanilla Frappuccino,                                                         </span><span class="w">
-</span><span class="c1">##        Walnut Cookie}       =&gt; {Chocolate Tart}      0.02810609  0.9396067 12.252637</span><span class="w">
-</span><span class="c1">## [66]  {Coffee Eclair,                                                               </span><span class="w">
-</span><span class="c1">##        Single Espresso}     =&gt; {Blackberry Tart}     0.02856823  0.9222423 11.691014</span><span class="w">
-</span><span class="c1">## [67]  {Chocolate Tart,                                                              </span><span class="w">
-</span><span class="c1">##        Walnut Cookie}       =&gt; {Vanilla Frappuccino} 0.02810609  0.9369748 11.646213</span><span class="w">
-</span><span class="c1">## [68]  {Raspberry Cookie,                                                            </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02190231  0.7522848 11.640119</span><span class="w">
-</span><span class="c1">## [69]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02198633  0.7522760 11.639984</span><span class="w">
-</span><span class="c1">## [70]  {Apple Croissant,                                                             </span><span class="w">
-</span><span class="c1">##        Apple Tart}          =&gt; {Cherry Soda}         0.02181828  0.7461686 11.638796</span><span class="w">
-</span><span class="c1">## [71]  {Apple Croissant,                                                             </span><span class="w">
-</span><span class="c1">##        Apple Danish}        =&gt; {Cherry Soda}         0.02184629  0.7456979 11.631454</span><span class="w">
-</span><span class="c1">## [72]  {Apple Danish,                                                                </span><span class="w">
-</span><span class="c1">##        Apple Tart}          =&gt; {Cherry Soda}         0.02177627  0.7443753 11.610824</span><span class="w">
-</span><span class="c1">## [73]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Lemon Lemonade}      =&gt; {Green Tea}           0.02190231  0.7497603 11.601058</span><span class="w">
-</span><span class="c1">## [74]  {Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02184629  0.7471264 11.560304</span><span class="w">
-</span><span class="c1">## [75]  {Lemon Cookie,                                                                </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Green Tea}           0.02181828  0.7465261 11.551016</span><span class="w">
-</span><span class="c1">## [76]  {Lemon Lemonade,                                                              </span><span class="w">
-</span><span class="c1">##        Raspberry Cookie}    =&gt; {Green Tea}           0.02191631  0.7448834 11.525598</span><span class="w">
-</span><span class="c1">## [77]  {Almond Twist,                                                                </span><span class="w">
-</span><span class="c1">##        Coffee Eclair}       =&gt; {Apple Pie}           0.03604638  0.9245690 11.524109</span><span class="w">
-</span><span class="c1">## [78]  {Apple Pie,                                                                   </span><span class="w">
-</span><span class="c1">##        Coffee Eclair}       =&gt; {Almond Twist}        0.03604638  0.9209302 11.476751</span><span class="w">
-</span><span class="c1">## [79]  {Almond Twist,                                                                </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Apple Pie}           0.02946449  0.9072876 11.308709</span><span class="w">
-</span><span class="c1">## [80]  {Apple Pie,                                                                   </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Almond Twist}        0.02946449  0.9041685 11.267864</span><span class="w">
-</span><span class="c1">## [81]  {Coffee Eclair,                                                               </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Almond Twist}        0.02953451  0.8910013 11.103773</span><span class="w">
-</span><span class="c1">## [82]  {Coffee Eclair,                                                               </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Apple Pie}           0.02950650  0.8901563 11.095179</span><span class="w">
-</span><span class="c1">## [83]  {Casino Cake,                                                                 </span><span class="w">
-</span><span class="c1">##        Chocolate Coffee}    =&gt; {Chocolate Cake}      0.03506610  0.9474082 10.901149</span><span class="w">
-</span><span class="c1">## [84]  {Casino Cake,                                                                 </span><span class="w">
-</span><span class="c1">##        Chocolate Cake}      =&gt; {Chocolate Coffee}    0.03506610  0.9395872 10.854885</span><span class="w">
-</span><span class="c1">## [85]  {Apricot Croissant,                                                           </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Blueberry Tart}      0.03447793  0.9280060 10.745428</span><span class="w">
-</span><span class="c1">## [86]  {Blueberry Tart,                                                              </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Apricot Croissant}   0.03447793  0.9368341 10.710447</span><span class="w">
-</span><span class="c1">## [87]  {Blackberry Tart,                                                             </span><span class="w">
-</span><span class="c1">##        Coffee Eclair}       =&gt; {Single Espresso}     0.02856823  0.7469791 10.604431</span><span class="w">
-</span><span class="c1">## [88]  {Chocolate Tart,                                                              </span><span class="w">
-</span><span class="c1">##        Vanilla Frappuccino} =&gt; {Walnut Cookie}       0.02810609  0.7441602 10.564412</span><span class="w">
-</span><span class="c1">## [89]  {Apricot Danish,                                                              </span><span class="w">
-</span><span class="c1">##        Opera Cake}          =&gt; {Cherry Tart}         0.04317443  0.9553765  9.864304</span><span class="w">
-</span><span class="c1">## [90]  {Cherry Tart,                                                                 </span><span class="w">
-</span><span class="c1">##        Opera Cake}          =&gt; {Apricot Danish}      0.04317443  0.9477405  9.838095</span><span class="w">
-</span><span class="c1">## [91]  {Chocolate Cake,                                                              </span><span class="w">
-</span><span class="c1">##        Chocolate Coffee}    =&gt; {Casino Cake}         0.03506610  0.7580987  9.731136</span><span class="w">
-</span><span class="c1">## [92]  {Apricot Danish,                                                              </span><span class="w">
-</span><span class="c1">##        Cherry Tart}         =&gt; {Opera Cake}          0.04317443  0.7742341  9.060391</span><span class="w">
-</span><span class="c1">## [93]  {Almond Twist,                                                                </span><span class="w">
-</span><span class="c1">##        Apple Pie,                                                                   </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Coffee Eclair}       0.02932445  0.9952471  8.730787</span><span class="w">
-</span><span class="c1">## [94]  {Almond Twist,                                                                </span><span class="w">
-</span><span class="c1">##        Apple Pie}           =&gt; {Coffee Eclair}       0.03604638  0.9356598  8.208058</span><span class="w">
-</span><span class="c1">## [95]  {Blackberry Tart,                                                             </span><span class="w">
-</span><span class="c1">##        Single Espresso}     =&gt; {Coffee Eclair}       0.02856823  0.9230769  8.097675</span><span class="w">
-</span><span class="c1">## [96]  {Almond Twist,                                                                </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Coffee Eclair}       0.02953451  0.9094437  7.978078</span><span class="w">
-</span><span class="c1">## [97]  {Apple Pie,                                                                   </span><span class="w">
-</span><span class="c1">##        Hot Coffee}          =&gt; {Coffee Eclair}       0.02950650  0.9054577  7.943111</span><span class="w">
-</span><span class="c1">## [98]  {Almond Twist,                                                                </span><span class="w">
-</span><span class="c1">##        Apple Pie,                                                                   </span><span class="w">
-</span><span class="c1">##        Coffee Eclair}       =&gt; {Hot Coffee}          0.02932445  0.8135198  7.610615</span><span class="w">
-</span><span class="c1">## [99]  {Almond Twist,                                                                </span><span class="w">
-</span><span class="c1">##        Apple Pie}           =&gt; {Hot Coffee}          0.02946449  0.7648128  7.154952</span><span class="w">
-</span><span class="c1">## [100] {Almond Twist,                                                                </span><span class="w">
-</span><span class="c1">##        Coffee Eclair}       =&gt; {Hot Coffee}          0.02953451  0.7575431  7.086943</span><span class="w">
-</span><span class="c1">## [101] {Apricot Croissant,                                                           </span><span class="w">
-</span><span class="c1">##        Blueberry Tart}      =&gt; {Hot Coffee}          0.03447793  0.7545204  7.058665</span><span class="w">
-</span><span class="c1">## [102] {Apple Pie,                                                                   </span><span class="w">
-</span><span class="c1">##        Coffee Eclair}       =&gt; {Hot Coffee}          0.02950650  0.7538462  7.052358</span><span class="w">
-</span><span class="c1">## [103] {Chocolate Cake}      =&gt; {Chocolate Coffee}    0.04625532  0.5322269  6.148723</span><span class="w">
-</span><span class="c1">## [104] {Chocolate Coffee}    =&gt; {Chocolate Cake}      0.04625532  0.5343796  6.148723</span><span class="w">
-</span><span class="c1">## [105] {Blueberry Tart}      =&gt; {Apricot Croissant}   0.04569516  0.5291065  6.049062</span><span class="w">
-</span><span class="c1">## [106] {Apricot Croissant}   =&gt; {Blueberry Tart}      0.04569516  0.5224143  6.049062</span><span class="w">
-</span><span class="c1">## [107] {Cherry Tart}         =&gt; {Apricot Danish}      0.05576406  0.5757663  5.976788</span><span class="w">
-</span><span class="c1">## [108] {Apricot Danish}      =&gt; {Cherry Tart}         0.05576406  0.5788632  5.976788</span><span class="w">
-</span><span class="c1">## [109] {Bottled Water}       =&gt; {Berry Tart}          0.03970143  0.5090681  5.828368</span><span class="w">
-</span><span class="c1">## [110] {Truffle Cake}        =&gt; {Gongolais Cookie}    0.04612929  0.5397346  5.808797</span><span class="w">
-</span><span class="c1">## [111] {Cheese Croissant}    =&gt; {Orange Juice}        0.04523303  0.5294214  5.612370</span><span class="w">
-</span><span class="c1">## [112] {Napoleon Cake}       =&gt; {Strawberry Cake}     0.04531705  0.5274654  5.547164</span><span class="w">
-</span><span class="c1">## [113] {Marzipan Cookie}     =&gt; {Tuile Cookie}        0.05348140  0.5723063  5.529326</span><span class="w">
-</span><span class="c1">## [114] {Tuile Cookie}        =&gt; {Marzipan Cookie}     0.05348140  0.5167095  5.529326</span><span class="w">
-</span><span class="c1">## [115] {Opera Cake}          =&gt; {Cherry Tart}         0.04555512  0.5331039  5.504321</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##       lhs                      rhs                      support confidence      lift
+</span><span class="w">
+</span><span class="c1">## [1]   {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02177627  1.0000000 14.281600
+</span><span class="w">
+</span><span class="c1">## [2]   {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02177627  1.0000000 14.250249
+</span><span class="w">
+</span><span class="c1">## [3]   {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02179028  0.9974359 14.244981
+</span><span class="w">
+</span><span class="c1">## [4]   {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02684573  0.9973985 14.244447
+</span><span class="w">
+</span><span class="c1">## [5]   {Apple Danish,                                                                
+</span><span class="w">
+</span><span class="c1">##        Apple Tart,                                                                  
+</span><span class="w">
+</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Croissant}     0.02162223  0.9929260 14.228951
+</span><span class="w">
+</span><span class="c1">## [6]   {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02177627  0.9980745 14.222810
+</span><span class="w">
+</span><span class="c1">## [7]   {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Cookie}    0.02177627  0.9942455 14.199417
+</span><span class="w">
+</span><span class="c1">## [8]   {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02179028  0.9942492 14.168299
+</span><span class="w">
+</span><span class="c1">## [9]   {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Lemonade}  0.02177627  0.9942455 14.168247
+</span><span class="w">
+</span><span class="c1">## [10]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02177627  0.9993573 14.161958
+</span><span class="w">
+</span><span class="c1">## [11]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02177627  0.9904459 14.145152
+</span><span class="w">
+</span><span class="c1">## [12]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02684573  0.9922360 14.139611
+</span><span class="w">
+</span><span class="c1">## [13]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02177627  1.0000000 14.129007
+</span><span class="w">
+</span><span class="c1">## [14]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02177627  0.9967949 14.125646
+</span><span class="w">
+</span><span class="c1">## [15]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Lemonade}      0.02177627  0.9980745 14.101801
+</span><span class="w">
+</span><span class="c1">## [16]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02177627  0.9942455 14.089519
+</span><span class="w">
+</span><span class="c1">## [17]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Cookie}        0.02177627  0.9936102 14.080516
+</span><span class="w">
+</span><span class="c1">## [18]  {Apple Croissant,                                                             
+</span><span class="w">
+</span><span class="c1">##        Apple Tart,                                                                  
+</span><span class="w">
+</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Danish}        0.02162223  0.9910141 14.077250
+</span><span class="w">
+</span><span class="c1">## [19]  {Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02684573  0.9927499 14.068324
+</span><span class="w">
+</span><span class="c1">## [20]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02684573  0.9953271 14.062983
+</span><span class="w">
+</span><span class="c1">## [21]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02179028  0.9948849 14.056736
+</span><span class="w">
+</span><span class="c1">## [22]  {Apple Croissant,                                                             
+</span><span class="w">
+</span><span class="c1">##        Apple Danish,                                                                
+</span><span class="w">
+</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Tart}          0.02162223  0.9897436 14.017376
+</span><span class="w">
+</span><span class="c1">## [23]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02177627  0.9904459 13.994016
+</span><span class="w">
+</span><span class="c1">## [24]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Cookie}    0.02705579  0.9261745 13.227254
+</span><span class="w">
+</span><span class="c1">## [25]  {Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02704179  0.9248084 13.207744
+</span><span class="w">
+</span><span class="c1">## [26]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02697177  0.9228558 13.179857
+</span><span class="w">
+</span><span class="c1">## [27]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02697177  0.9228558 13.150925
+</span><span class="w">
+</span><span class="c1">## [28]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Lemonade}  0.02691575  0.9213806 13.129904
+</span><span class="w">
+</span><span class="c1">## [29]  {Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02697177  0.9264069 13.128173
+</span><span class="w">
+</span><span class="c1">## [30]  {Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02704179  0.9288119 13.123190
+</span><span class="w">
+</span><span class="c1">## [31]  {Apple Danish,                                                                
+</span><span class="w">
+</span><span class="c1">##        Apple Tart}          =&gt; {Apple Croissant}     0.02678972  0.9157492 13.122981
+</span><span class="w">
+</span><span class="c1">## [32]  {Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02704179  0.9190861 13.097207
+</span><span class="w">
+</span><span class="c1">## [33]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Lemonade}      0.02705579  0.9257307 13.079655
+</span><span class="w">
+</span><span class="c1">## [34]  {Apple Tart,                                                                  
+</span><span class="w">
+</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Croissant}     0.02181828  0.9116442 13.064156
+</span><span class="w">
+</span><span class="c1">## [35]  {Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02691575  0.9204981 13.044439
+</span><span class="w">
+</span><span class="c1">## [36]  {Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Cookie}        0.02705579  0.9195621 13.031175
+</span><span class="w">
+</span><span class="c1">## [37]  {Apple Croissant,                                                             
+</span><span class="w">
+</span><span class="c1">##        Apple Tart}          =&gt; {Apple Danish}        0.02678972  0.9161877 13.014349
+</span><span class="w">
+</span><span class="c1">## [38]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02691575  0.9209391 13.011955
+</span><span class="w">
+</span><span class="c1">## [39]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Raspberry Cookie}    0.02190231  0.9098313 12.993847
+</span><span class="w">
+</span><span class="c1">## [40]  {Apple Croissant,                                                             
+</span><span class="w">
+</span><span class="c1">##        Apple Danish}        =&gt; {Apple Tart}          0.02678972  0.9144359 12.950822
+</span><span class="w">
+</span><span class="c1">## [41]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Cookie}        0.02198633  0.9133217 12.942742
+</span><span class="w">
+</span><span class="c1">## [42]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Cookie}    0.02191631  0.9061957 12.941925
+</span><span class="w">
+</span><span class="c1">## [43]  {Apple Tart,                                                                  
+</span><span class="w">
+</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Danish}        0.02177627  0.9098888 12.924874
+</span><span class="w">
+</span><span class="c1">## [44]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie}        =&gt; {Raspberry Lemonade}  0.02198633  0.9069902 12.924836
+</span><span class="w">
+</span><span class="c1">## [45]  {Apple Croissant,                                                             
+</span><span class="w">
+</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Danish}        0.02184629  0.9085614 12.906019
+</span><span class="w">
+</span><span class="c1">## [46]  {Apple Danish,                                                                
+</span><span class="w">
+</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Croissant}     0.02184629  0.8991354 12.884901
+</span><span class="w">
+</span><span class="c1">## [47]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade}      =&gt; {Raspberry Lemonade}  0.02184629  0.9033005 12.872258
+</span><span class="w">
+</span><span class="c1">## [48]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie}        =&gt; {Raspberry Cookie}    0.02181828  0.9000578 12.854265
+</span><span class="w">
+</span><span class="c1">## [49]  {Apple Croissant,                                                             
+</span><span class="w">
+</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Tart}          0.02181828  0.9073966 12.851126
+</span><span class="w">
+</span><span class="c1">## [50]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Raspberry Lemonade}  0.02190231  0.9009217 12.838358
+</span><span class="w">
+</span><span class="c1">## [51]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade}      =&gt; {Lemon Cookie}        0.02190231  0.9056167 12.833553
+</span><span class="w">
+</span><span class="c1">## [52]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Lemon Lemonade}      0.02184629  0.9075044 12.822135
+</span><span class="w">
+</span><span class="c1">## [53]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Lemon Cookie}        =&gt; {Lemon Lemonade}      0.02190231  0.9035240 12.765896
+</span><span class="w">
+</span><span class="c1">## [54]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Lemonade}      0.02191631  0.9014977 12.737267
+</span><span class="w">
+</span><span class="c1">## [55]  {Green Tea,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Lemon Cookie}        0.02181828  0.8974654 12.718042
+</span><span class="w">
+</span><span class="c1">## [56]  {Apple Danish,                                                                
+</span><span class="w">
+</span><span class="c1">##        Cherry Soda}         =&gt; {Apple Tart}          0.02177627  0.8962536 12.693312
+</span><span class="w">
+</span><span class="c1">## [57]  {Apple Croissant,                                                             
+</span><span class="w">
+</span><span class="c1">##        Apple Danish,                                                                
+</span><span class="w">
+</span><span class="c1">##        Apple Tart}          =&gt; {Cherry Soda}         0.02162223  0.8071093 12.589353
+</span><span class="w">
+</span><span class="c1">## [58]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02177627  0.8111633 12.551148
+</span><span class="w">
+</span><span class="c1">## [59]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02177627  0.8090531 12.518497
+</span><span class="w">
+</span><span class="c1">## [60]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02177627  0.8073728 12.492498
+</span><span class="w">
+</span><span class="c1">## [61]  {Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02179028  0.8058001 12.468163
+</span><span class="w">
+</span><span class="c1">## [62]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Green Tea}           0.02177627  0.8048654 12.453701
+</span><span class="w">
+</span><span class="c1">## [63]  {Apple Pie,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Coffee Eclair,                                                               
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Almond Twist}        0.02932445  0.9938301 12.385239
+</span><span class="w">
+</span><span class="c1">## [64]  {Almond Twist,                                                                
+</span><span class="w">
+</span><span class="c1">##        Coffee Eclair,                                                               
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Apple Pie}           0.02932445  0.9928876 12.375654
+</span><span class="w">
+</span><span class="c1">## [65]  {Vanilla Frappuccino,                                                         
+</span><span class="w">
+</span><span class="c1">##        Walnut Cookie}       =&gt; {Chocolate Tart}      0.02810609  0.9396067 12.252637
+</span><span class="w">
+</span><span class="c1">## [66]  {Coffee Eclair,                                                               
+</span><span class="w">
+</span><span class="c1">##        Single Espresso}     =&gt; {Blackberry Tart}     0.02856823  0.9222423 11.691014
+</span><span class="w">
+</span><span class="c1">## [67]  {Chocolate Tart,                                                              
+</span><span class="w">
+</span><span class="c1">##        Walnut Cookie}       =&gt; {Vanilla Frappuccino} 0.02810609  0.9369748 11.646213
+</span><span class="w">
+</span><span class="c1">## [68]  {Raspberry Cookie,                                                            
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02190231  0.7522848 11.640119
+</span><span class="w">
+</span><span class="c1">## [69]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02198633  0.7522760 11.639984
+</span><span class="w">
+</span><span class="c1">## [70]  {Apple Croissant,                                                             
+</span><span class="w">
+</span><span class="c1">##        Apple Tart}          =&gt; {Cherry Soda}         0.02181828  0.7461686 11.638796
+</span><span class="w">
+</span><span class="c1">## [71]  {Apple Croissant,                                                             
+</span><span class="w">
+</span><span class="c1">##        Apple Danish}        =&gt; {Cherry Soda}         0.02184629  0.7456979 11.631454
+</span><span class="w">
+</span><span class="c1">## [72]  {Apple Danish,                                                                
+</span><span class="w">
+</span><span class="c1">##        Apple Tart}          =&gt; {Cherry Soda}         0.02177627  0.7443753 11.610824
+</span><span class="w">
+</span><span class="c1">## [73]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Lemon Lemonade}      =&gt; {Green Tea}           0.02190231  0.7497603 11.601058
+</span><span class="w">
+</span><span class="c1">## [74]  {Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Lemonade}  =&gt; {Green Tea}           0.02184629  0.7471264 11.560304
+</span><span class="w">
+</span><span class="c1">## [75]  {Lemon Cookie,                                                                
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Green Tea}           0.02181828  0.7465261 11.551016
+</span><span class="w">
+</span><span class="c1">## [76]  {Lemon Lemonade,                                                              
+</span><span class="w">
+</span><span class="c1">##        Raspberry Cookie}    =&gt; {Green Tea}           0.02191631  0.7448834 11.525598
+</span><span class="w">
+</span><span class="c1">## [77]  {Almond Twist,                                                                
+</span><span class="w">
+</span><span class="c1">##        Coffee Eclair}       =&gt; {Apple Pie}           0.03604638  0.9245690 11.524109
+</span><span class="w">
+</span><span class="c1">## [78]  {Apple Pie,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Coffee Eclair}       =&gt; {Almond Twist}        0.03604638  0.9209302 11.476751
+</span><span class="w">
+</span><span class="c1">## [79]  {Almond Twist,                                                                
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Apple Pie}           0.02946449  0.9072876 11.308709
+</span><span class="w">
+</span><span class="c1">## [80]  {Apple Pie,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Almond Twist}        0.02946449  0.9041685 11.267864
+</span><span class="w">
+</span><span class="c1">## [81]  {Coffee Eclair,                                                               
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Almond Twist}        0.02953451  0.8910013 11.103773
+</span><span class="w">
+</span><span class="c1">## [82]  {Coffee Eclair,                                                               
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Apple Pie}           0.02950650  0.8901563 11.095179
+</span><span class="w">
+</span><span class="c1">## [83]  {Casino Cake,                                                                 
+</span><span class="w">
+</span><span class="c1">##        Chocolate Coffee}    =&gt; {Chocolate Cake}      0.03506610  0.9474082 10.901149
+</span><span class="w">
+</span><span class="c1">## [84]  {Casino Cake,                                                                 
+</span><span class="w">
+</span><span class="c1">##        Chocolate Cake}      =&gt; {Chocolate Coffee}    0.03506610  0.9395872 10.854885
+</span><span class="w">
+</span><span class="c1">## [85]  {Apricot Croissant,                                                           
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Blueberry Tart}      0.03447793  0.9280060 10.745428
+</span><span class="w">
+</span><span class="c1">## [86]  {Blueberry Tart,                                                              
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Apricot Croissant}   0.03447793  0.9368341 10.710447
+</span><span class="w">
+</span><span class="c1">## [87]  {Blackberry Tart,                                                             
+</span><span class="w">
+</span><span class="c1">##        Coffee Eclair}       =&gt; {Single Espresso}     0.02856823  0.7469791 10.604431
+</span><span class="w">
+</span><span class="c1">## [88]  {Chocolate Tart,                                                              
+</span><span class="w">
+</span><span class="c1">##        Vanilla Frappuccino} =&gt; {Walnut Cookie}       0.02810609  0.7441602 10.564412
+</span><span class="w">
+</span><span class="c1">## [89]  {Apricot Danish,                                                              
+</span><span class="w">
+</span><span class="c1">##        Opera Cake}          =&gt; {Cherry Tart}         0.04317443  0.9553765  9.864304
+</span><span class="w">
+</span><span class="c1">## [90]  {Cherry Tart,                                                                 
+</span><span class="w">
+</span><span class="c1">##        Opera Cake}          =&gt; {Apricot Danish}      0.04317443  0.9477405  9.838095
+</span><span class="w">
+</span><span class="c1">## [91]  {Chocolate Cake,                                                              
+</span><span class="w">
+</span><span class="c1">##        Chocolate Coffee}    =&gt; {Casino Cake}         0.03506610  0.7580987  9.731136
+</span><span class="w">
+</span><span class="c1">## [92]  {Apricot Danish,                                                              
+</span><span class="w">
+</span><span class="c1">##        Cherry Tart}         =&gt; {Opera Cake}          0.04317443  0.7742341  9.060391
+</span><span class="w">
+</span><span class="c1">## [93]  {Almond Twist,                                                                
+</span><span class="w">
+</span><span class="c1">##        Apple Pie,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Coffee Eclair}       0.02932445  0.9952471  8.730787
+</span><span class="w">
+</span><span class="c1">## [94]  {Almond Twist,                                                                
+</span><span class="w">
+</span><span class="c1">##        Apple Pie}           =&gt; {Coffee Eclair}       0.03604638  0.9356598  8.208058
+</span><span class="w">
+</span><span class="c1">## [95]  {Blackberry Tart,                                                             
+</span><span class="w">
+</span><span class="c1">##        Single Espresso}     =&gt; {Coffee Eclair}       0.02856823  0.9230769  8.097675
+</span><span class="w">
+</span><span class="c1">## [96]  {Almond Twist,                                                                
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Coffee Eclair}       0.02953451  0.9094437  7.978078
+</span><span class="w">
+</span><span class="c1">## [97]  {Apple Pie,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Hot Coffee}          =&gt; {Coffee Eclair}       0.02950650  0.9054577  7.943111
+</span><span class="w">
+</span><span class="c1">## [98]  {Almond Twist,                                                                
+</span><span class="w">
+</span><span class="c1">##        Apple Pie,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Coffee Eclair}       =&gt; {Hot Coffee}          0.02932445  0.8135198  7.610615
+</span><span class="w">
+</span><span class="c1">## [99]  {Almond Twist,                                                                
+</span><span class="w">
+</span><span class="c1">##        Apple Pie}           =&gt; {Hot Coffee}          0.02946449  0.7648128  7.154952
+</span><span class="w">
+</span><span class="c1">## [100] {Almond Twist,                                                                
+</span><span class="w">
+</span><span class="c1">##        Coffee Eclair}       =&gt; {Hot Coffee}          0.02953451  0.7575431  7.086943
+</span><span class="w">
+</span><span class="c1">## [101] {Apricot Croissant,                                                           
+</span><span class="w">
+</span><span class="c1">##        Blueberry Tart}      =&gt; {Hot Coffee}          0.03447793  0.7545204  7.058665
+</span><span class="w">
+</span><span class="c1">## [102] {Apple Pie,                                                                   
+</span><span class="w">
+</span><span class="c1">##        Coffee Eclair}       =&gt; {Hot Coffee}          0.02950650  0.7538462  7.052358
+</span><span class="w">
+</span><span class="c1">## [103] {Chocolate Cake}      =&gt; {Chocolate Coffee}    0.04625532  0.5322269  6.148723
+</span><span class="w">
+</span><span class="c1">## [104] {Chocolate Coffee}    =&gt; {Chocolate Cake}      0.04625532  0.5343796  6.148723
+</span><span class="w">
+</span><span class="c1">## [105] {Blueberry Tart}      =&gt; {Apricot Croissant}   0.04569516  0.5291065  6.049062
+</span><span class="w">
+</span><span class="c1">## [106] {Apricot Croissant}   =&gt; {Blueberry Tart}      0.04569516  0.5224143  6.049062
+</span><span class="w">
+</span><span class="c1">## [107] {Cherry Tart}         =&gt; {Apricot Danish}      0.05576406  0.5757663  5.976788
+</span><span class="w">
+</span><span class="c1">## [108] {Apricot Danish}      =&gt; {Cherry Tart}         0.05576406  0.5788632  5.976788
+</span><span class="w">
+</span><span class="c1">## [109] {Bottled Water}       =&gt; {Berry Tart}          0.03970143  0.5090681  5.828368
+</span><span class="w">
+</span><span class="c1">## [110] {Truffle Cake}        =&gt; {Gongolais Cookie}    0.04612929  0.5397346  5.808797
+</span><span class="w">
+</span><span class="c1">## [111] {Cheese Croissant}    =&gt; {Orange Juice}        0.04523303  0.5294214  5.612370
+</span><span class="w">
+</span><span class="c1">## [112] {Napoleon Cake}       =&gt; {Strawberry Cake}     0.04531705  0.5274654  5.547164
+</span><span class="w">
+</span><span class="c1">## [113] {Marzipan Cookie}     =&gt; {Tuile Cookie}        0.05348140  0.5723063  5.529326
+</span><span class="w">
+</span><span class="c1">## [114] {Tuile Cookie}        =&gt; {Marzipan Cookie}     0.05348140  0.5167095  5.529326
+</span><span class="w">
+</span><span class="c1">## [115] {Opera Cake}          =&gt; {Cherry Tart}         0.04555512  0.5331039  5.504321
+</span><span class="w">
 </span><span class="c1">## [116] {Opera Cake}          =&gt; {Apricot Danish}      0.04519102  0.5288430  5.489696</span></code></pre></figure>
 
 <p>Looks like there were no redundant rules.</p>
@@ -654,96 +966,179 @@ ga('send', 'pageview');
 <p>All the rules (except the last rule) have lifts of more than 5.5. This means that the correlation between all the items in their respective rules are very high.</p>
 <p>From all the rules above, the rules which stand out are rules 1, 2, 10, 13, 58. The items in these rules seems to be appearing frequently in many other smaller rules as well. These items are Lemon Lemonade, Raspberry Lemonade, Lemon Cookie, Raspberry Cookie and Green Tea. We should also keep in mind that the antedecent and consequent seem to be switching places (a -&gt; b and b -&gt; a) in order to form new rules. Let us remove the rules based on their itemset while keeping in mind that the consequent and antedecent are interchangeable with only minor variations in support, confidence and lift. This is to make it easier to read. We will also sort the rules by support and lift.</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Removing rules based on the itemset</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Removing rules based on the itemset
+</span><span class="w">
 </span><span class="n">new.rules</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rules</span><span class="p">[</span><span class="o">!</span><span class="n">duplicated</span><span class="p">(</span><span class="n">generatingItemsets</span><span class="p">(</span><span class="n">rules</span><span class="p">))]</span><span class="w">
 
-</span><span class="c1">#Sorting the rules based on support and lift</span><span class="w">
+</span><span class="c1">#Sorting the rules based on support and lift
+</span><span class="w">
 </span><span class="n">rules.sorted.sup</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sort</span><span class="p">(</span><span class="n">new.rules</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"support"</span><span class="p">)</span><span class="w">
 </span><span class="n">rules.sorted.lift</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sort</span><span class="p">(</span><span class="n">new.rules</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"lift"</span><span class="p">)</span><span class="w">
 </span><span class="n">inspect</span><span class="p">(</span><span class="n">rules.sorted.lift</span><span class="p">)</span></code></pre></figure>
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##      lhs                     rhs                      support confidence      lift</span><span class="w">
-</span><span class="c1">## [1]  {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02177627  0.9980745 14.222810</span><span class="w">
-</span><span class="c1">## [2]  {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie,                                                           </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02177627  1.0000000 14.129007</span><span class="w">
-</span><span class="c1">## [3]  {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02177627  0.9980745 14.101801</span><span class="w">
-</span><span class="c1">## [4]  {Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie,                                                           </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02684573  0.9953271 14.062983</span><span class="w">
-</span><span class="c1">## [5]  {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie,                                                           </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02179028  0.9948849 14.056736</span><span class="w">
-</span><span class="c1">## [6]  {Apple Croissant,                                                            </span><span class="w">
-</span><span class="c1">##       Apple Danish,                                                               </span><span class="w">
-</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02162223  0.9897436 14.017376</span><span class="w">
-</span><span class="c1">## [7]  {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02177627  0.9904459 13.994016</span><span class="w">
-</span><span class="c1">## [8]  {Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02697177  0.9228558 13.150925</span><span class="w">
-</span><span class="c1">## [9]  {Raspberry Cookie,                                                           </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02704179  0.9288119 13.123190</span><span class="w">
-</span><span class="c1">## [10] {Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02705579  0.9257307 13.079655</span><span class="w">
-</span><span class="c1">## [11] {Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02691575  0.9209391 13.011955</span><span class="w">
-</span><span class="c1">## [12] {Apple Croissant,                                                            </span><span class="w">
-</span><span class="c1">##       Apple Danish}       =&gt; {Apple Tart}          0.02678972  0.9144359 12.950822</span><span class="w">
-</span><span class="c1">## [13] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie}       =&gt; {Raspberry Lemonade}  0.02198633  0.9069902 12.924836</span><span class="w">
-</span><span class="c1">## [14] {Apple Croissant,                                                            </span><span class="w">
-</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Danish}        0.02184629  0.9085614 12.906019</span><span class="w">
-</span><span class="c1">## [15] {Apple Croissant,                                                            </span><span class="w">
-</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02181828  0.9073966 12.851126</span><span class="w">
-</span><span class="c1">## [16] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02190231  0.9009217 12.838358</span><span class="w">
-</span><span class="c1">## [17] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02184629  0.9075044 12.822135</span><span class="w">
-</span><span class="c1">## [18] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie}       =&gt; {Lemon Lemonade}      0.02190231  0.9035240 12.765896</span><span class="w">
-</span><span class="c1">## [19] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02191631  0.9014977 12.737267</span><span class="w">
-</span><span class="c1">## [20] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Cookie}        0.02181828  0.8974654 12.718042</span><span class="w">
-</span><span class="c1">## [21] {Apple Danish,                                                               </span><span class="w">
-</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02177627  0.8962536 12.693312</span><span class="w">
-</span><span class="c1">## [22] {Chocolate Tart,                                                             </span><span class="w">
-</span><span class="c1">##       Walnut Cookie}      =&gt; {Vanilla Frappuccino} 0.02810609  0.9369748 11.646213</span><span class="w">
-</span><span class="c1">## [23] {Casino Cake,                                                                </span><span class="w">
-</span><span class="c1">##       Chocolate Coffee}   =&gt; {Chocolate Cake}      0.03506610  0.9474082 10.901149</span><span class="w">
-</span><span class="c1">## [24] {Apricot Danish,                                                             </span><span class="w">
-</span><span class="c1">##       Opera Cake}         =&gt; {Cherry Tart}         0.04317443  0.9553765  9.864304</span><span class="w">
-</span><span class="c1">## [25] {Almond Twist,                                                               </span><span class="w">
-</span><span class="c1">##       Apple Pie,                                                                  </span><span class="w">
-</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02932445  0.9952471  8.730787</span><span class="w">
-</span><span class="c1">## [26] {Almond Twist,                                                               </span><span class="w">
-</span><span class="c1">##       Apple Pie}          =&gt; {Coffee Eclair}       0.03604638  0.9356598  8.208058</span><span class="w">
-</span><span class="c1">## [27] {Blackberry Tart,                                                            </span><span class="w">
-</span><span class="c1">##       Single Espresso}    =&gt; {Coffee Eclair}       0.02856823  0.9230769  8.097675</span><span class="w">
-</span><span class="c1">## [28] {Almond Twist,                                                               </span><span class="w">
-</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02953451  0.9094437  7.978078</span><span class="w">
-</span><span class="c1">## [29] {Apple Pie,                                                                  </span><span class="w">
-</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02950650  0.9054577  7.943111</span><span class="w">
-</span><span class="c1">## [30] {Almond Twist,                                                               </span><span class="w">
-</span><span class="c1">##       Apple Pie}          =&gt; {Hot Coffee}          0.02946449  0.7648128  7.154952</span><span class="w">
-</span><span class="c1">## [31] {Apricot Croissant,                                                          </span><span class="w">
-</span><span class="c1">##       Blueberry Tart}     =&gt; {Hot Coffee}          0.03447793  0.7545204  7.058665</span><span class="w">
-</span><span class="c1">## [32] {Chocolate Coffee}   =&gt; {Chocolate Cake}      0.04625532  0.5343796  6.148723</span><span class="w">
-</span><span class="c1">## [33] {Blueberry Tart}     =&gt; {Apricot Croissant}   0.04569516  0.5291065  6.049062</span><span class="w">
-</span><span class="c1">## [34] {Apricot Danish}     =&gt; {Cherry Tart}         0.05576406  0.5788632  5.976788</span><span class="w">
-</span><span class="c1">## [35] {Bottled Water}      =&gt; {Berry Tart}          0.03970143  0.5090681  5.828368</span><span class="w">
-</span><span class="c1">## [36] {Truffle Cake}       =&gt; {Gongolais Cookie}    0.04612929  0.5397346  5.808797</span><span class="w">
-</span><span class="c1">## [37] {Cheese Croissant}   =&gt; {Orange Juice}        0.04523303  0.5294214  5.612370</span><span class="w">
-</span><span class="c1">## [38] {Napoleon Cake}      =&gt; {Strawberry Cake}     0.04531705  0.5274654  5.547164</span><span class="w">
-</span><span class="c1">## [39] {Marzipan Cookie}    =&gt; {Tuile Cookie}        0.05348140  0.5723063  5.529326</span><span class="w">
-</span><span class="c1">## [40] {Opera Cake}         =&gt; {Cherry Tart}         0.04555512  0.5331039  5.504321</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##      lhs                     rhs                      support confidence      lift
+</span><span class="w">
+</span><span class="c1">## [1]  {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02177627  0.9980745 14.222810
+</span><span class="w">
+</span><span class="c1">## [2]  {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie,                                                           
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02177627  1.0000000 14.129007
+</span><span class="w">
+</span><span class="c1">## [3]  {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02177627  0.9980745 14.101801
+</span><span class="w">
+</span><span class="c1">## [4]  {Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie,                                                           
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02684573  0.9953271 14.062983
+</span><span class="w">
+</span><span class="c1">## [5]  {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie,                                                           
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02179028  0.9948849 14.056736
+</span><span class="w">
+</span><span class="c1">## [6]  {Apple Croissant,                                                            
+</span><span class="w">
+</span><span class="c1">##       Apple Danish,                                                               
+</span><span class="w">
+</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02162223  0.9897436 14.017376
+</span><span class="w">
+</span><span class="c1">## [7]  {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02177627  0.9904459 13.994016
+</span><span class="w">
+</span><span class="c1">## [8]  {Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02697177  0.9228558 13.150925
+</span><span class="w">
+</span><span class="c1">## [9]  {Raspberry Cookie,                                                           
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02704179  0.9288119 13.123190
+</span><span class="w">
+</span><span class="c1">## [10] {Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02705579  0.9257307 13.079655
+</span><span class="w">
+</span><span class="c1">## [11] {Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02691575  0.9209391 13.011955
+</span><span class="w">
+</span><span class="c1">## [12] {Apple Croissant,                                                            
+</span><span class="w">
+</span><span class="c1">##       Apple Danish}       =&gt; {Apple Tart}          0.02678972  0.9144359 12.950822
+</span><span class="w">
+</span><span class="c1">## [13] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie}       =&gt; {Raspberry Lemonade}  0.02198633  0.9069902 12.924836
+</span><span class="w">
+</span><span class="c1">## [14] {Apple Croissant,                                                            
+</span><span class="w">
+</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Danish}        0.02184629  0.9085614 12.906019
+</span><span class="w">
+</span><span class="c1">## [15] {Apple Croissant,                                                            
+</span><span class="w">
+</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02181828  0.9073966 12.851126
+</span><span class="w">
+</span><span class="c1">## [16] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02190231  0.9009217 12.838358
+</span><span class="w">
+</span><span class="c1">## [17] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02184629  0.9075044 12.822135
+</span><span class="w">
+</span><span class="c1">## [18] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie}       =&gt; {Lemon Lemonade}      0.02190231  0.9035240 12.765896
+</span><span class="w">
+</span><span class="c1">## [19] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02191631  0.9014977 12.737267
+</span><span class="w">
+</span><span class="c1">## [20] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Cookie}        0.02181828  0.8974654 12.718042
+</span><span class="w">
+</span><span class="c1">## [21] {Apple Danish,                                                               
+</span><span class="w">
+</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02177627  0.8962536 12.693312
+</span><span class="w">
+</span><span class="c1">## [22] {Chocolate Tart,                                                             
+</span><span class="w">
+</span><span class="c1">##       Walnut Cookie}      =&gt; {Vanilla Frappuccino} 0.02810609  0.9369748 11.646213
+</span><span class="w">
+</span><span class="c1">## [23] {Casino Cake,                                                                
+</span><span class="w">
+</span><span class="c1">##       Chocolate Coffee}   =&gt; {Chocolate Cake}      0.03506610  0.9474082 10.901149
+</span><span class="w">
+</span><span class="c1">## [24] {Apricot Danish,                                                             
+</span><span class="w">
+</span><span class="c1">##       Opera Cake}         =&gt; {Cherry Tart}         0.04317443  0.9553765  9.864304
+</span><span class="w">
+</span><span class="c1">## [25] {Almond Twist,                                                               
+</span><span class="w">
+</span><span class="c1">##       Apple Pie,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02932445  0.9952471  8.730787
+</span><span class="w">
+</span><span class="c1">## [26] {Almond Twist,                                                               
+</span><span class="w">
+</span><span class="c1">##       Apple Pie}          =&gt; {Coffee Eclair}       0.03604638  0.9356598  8.208058
+</span><span class="w">
+</span><span class="c1">## [27] {Blackberry Tart,                                                            
+</span><span class="w">
+</span><span class="c1">##       Single Espresso}    =&gt; {Coffee Eclair}       0.02856823  0.9230769  8.097675
+</span><span class="w">
+</span><span class="c1">## [28] {Almond Twist,                                                               
+</span><span class="w">
+</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02953451  0.9094437  7.978078
+</span><span class="w">
+</span><span class="c1">## [29] {Apple Pie,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02950650  0.9054577  7.943111
+</span><span class="w">
+</span><span class="c1">## [30] {Almond Twist,                                                               
+</span><span class="w">
+</span><span class="c1">##       Apple Pie}          =&gt; {Hot Coffee}          0.02946449  0.7648128  7.154952
+</span><span class="w">
+</span><span class="c1">## [31] {Apricot Croissant,                                                          
+</span><span class="w">
+</span><span class="c1">##       Blueberry Tart}     =&gt; {Hot Coffee}          0.03447793  0.7545204  7.058665
+</span><span class="w">
+</span><span class="c1">## [32] {Chocolate Coffee}   =&gt; {Chocolate Cake}      0.04625532  0.5343796  6.148723
+</span><span class="w">
+</span><span class="c1">## [33] {Blueberry Tart}     =&gt; {Apricot Croissant}   0.04569516  0.5291065  6.049062
+</span><span class="w">
+</span><span class="c1">## [34] {Apricot Danish}     =&gt; {Cherry Tart}         0.05576406  0.5788632  5.976788
+</span><span class="w">
+</span><span class="c1">## [35] {Bottled Water}      =&gt; {Berry Tart}          0.03970143  0.5090681  5.828368
+</span><span class="w">
+</span><span class="c1">## [36] {Truffle Cake}       =&gt; {Gongolais Cookie}    0.04612929  0.5397346  5.808797
+</span><span class="w">
+</span><span class="c1">## [37] {Cheese Croissant}   =&gt; {Orange Juice}        0.04523303  0.5294214  5.612370
+</span><span class="w">
+</span><span class="c1">## [38] {Napoleon Cake}      =&gt; {Strawberry Cake}     0.04531705  0.5274654  5.547164
+</span><span class="w">
+</span><span class="c1">## [39] {Marzipan Cookie}    =&gt; {Tuile Cookie}        0.05348140  0.5723063  5.529326
+</span><span class="w">
+</span><span class="c1">## [40] {Opera Cake}         =&gt; {Cherry Tart}         0.04555512  0.5331039  5.504321
+</span><span class="w">
 </span><span class="c1">## [41] {Opera Cake}         =&gt; {Apricot Danish}      0.04519102  0.5288430  5.489696</span></code></pre></figure>
 
 <p>Looks like a lot of rules were removed because they have belong to the same itemset. Take a look at rule number 2.</p>
@@ -753,87 +1148,168 @@ ga('send', 'pageview');
 <figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">inspect</span><span class="p">(</span><span class="n">rules.sorted.sup</span><span class="p">)</span></code></pre></figure>
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##      lhs                     rhs                      support confidence      lift</span><span class="w">
-</span><span class="c1">## [1]  {Apricot Danish}     =&gt; {Cherry Tart}         0.05576406  0.5788632  5.976788</span><span class="w">
-</span><span class="c1">## [2]  {Marzipan Cookie}    =&gt; {Tuile Cookie}        0.05348140  0.5723063  5.529326</span><span class="w">
-</span><span class="c1">## [3]  {Chocolate Coffee}   =&gt; {Chocolate Cake}      0.04625532  0.5343796  6.148723</span><span class="w">
-</span><span class="c1">## [4]  {Truffle Cake}       =&gt; {Gongolais Cookie}    0.04612929  0.5397346  5.808797</span><span class="w">
-</span><span class="c1">## [5]  {Blueberry Tart}     =&gt; {Apricot Croissant}   0.04569516  0.5291065  6.049062</span><span class="w">
-</span><span class="c1">## [6]  {Opera Cake}         =&gt; {Cherry Tart}         0.04555512  0.5331039  5.504321</span><span class="w">
-</span><span class="c1">## [7]  {Napoleon Cake}      =&gt; {Strawberry Cake}     0.04531705  0.5274654  5.547164</span><span class="w">
-</span><span class="c1">## [8]  {Cheese Croissant}   =&gt; {Orange Juice}        0.04523303  0.5294214  5.612370</span><span class="w">
-</span><span class="c1">## [9]  {Opera Cake}         =&gt; {Apricot Danish}      0.04519102  0.5288430  5.489696</span><span class="w">
-</span><span class="c1">## [10] {Apricot Danish,                                                             </span><span class="w">
-</span><span class="c1">##       Opera Cake}         =&gt; {Cherry Tart}         0.04317443  0.9553765  9.864304</span><span class="w">
-</span><span class="c1">## [11] {Bottled Water}      =&gt; {Berry Tart}          0.03970143  0.5090681  5.828368</span><span class="w">
-</span><span class="c1">## [12] {Almond Twist,                                                               </span><span class="w">
-</span><span class="c1">##       Apple Pie}          =&gt; {Coffee Eclair}       0.03604638  0.9356598  8.208058</span><span class="w">
-</span><span class="c1">## [13] {Casino Cake,                                                                </span><span class="w">
-</span><span class="c1">##       Chocolate Coffee}   =&gt; {Chocolate Cake}      0.03506610  0.9474082 10.901149</span><span class="w">
-</span><span class="c1">## [14] {Apricot Croissant,                                                          </span><span class="w">
-</span><span class="c1">##       Blueberry Tart}     =&gt; {Hot Coffee}          0.03447793  0.7545204  7.058665</span><span class="w">
-</span><span class="c1">## [15] {Almond Twist,                                                               </span><span class="w">
-</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02953451  0.9094437  7.978078</span><span class="w">
-</span><span class="c1">## [16] {Apple Pie,                                                                  </span><span class="w">
-</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02950650  0.9054577  7.943111</span><span class="w">
-</span><span class="c1">## [17] {Almond Twist,                                                               </span><span class="w">
-</span><span class="c1">##       Apple Pie}          =&gt; {Hot Coffee}          0.02946449  0.7648128  7.154952</span><span class="w">
-</span><span class="c1">## [18] {Almond Twist,                                                               </span><span class="w">
-</span><span class="c1">##       Apple Pie,                                                                  </span><span class="w">
-</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02932445  0.9952471  8.730787</span><span class="w">
-</span><span class="c1">## [19] {Blackberry Tart,                                                            </span><span class="w">
-</span><span class="c1">##       Single Espresso}    =&gt; {Coffee Eclair}       0.02856823  0.9230769  8.097675</span><span class="w">
-</span><span class="c1">## [20] {Chocolate Tart,                                                             </span><span class="w">
-</span><span class="c1">##       Walnut Cookie}      =&gt; {Vanilla Frappuccino} 0.02810609  0.9369748 11.646213</span><span class="w">
-</span><span class="c1">## [21] {Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02705579  0.9257307 13.079655</span><span class="w">
-</span><span class="c1">## [22] {Raspberry Cookie,                                                           </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02704179  0.9288119 13.123190</span><span class="w">
-</span><span class="c1">## [23] {Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02697177  0.9228558 13.150925</span><span class="w">
-</span><span class="c1">## [24] {Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02691575  0.9209391 13.011955</span><span class="w">
-</span><span class="c1">## [25] {Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie,                                                           </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02684573  0.9953271 14.062983</span><span class="w">
-</span><span class="c1">## [26] {Apple Croissant,                                                            </span><span class="w">
-</span><span class="c1">##       Apple Danish}       =&gt; {Apple Tart}          0.02678972  0.9144359 12.950822</span><span class="w">
-</span><span class="c1">## [27] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie}       =&gt; {Raspberry Lemonade}  0.02198633  0.9069902 12.924836</span><span class="w">
-</span><span class="c1">## [28] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02191631  0.9014977 12.737267</span><span class="w">
-</span><span class="c1">## [29] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02190231  0.9009217 12.838358</span><span class="w">
-</span><span class="c1">## [30] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie}       =&gt; {Lemon Lemonade}      0.02190231  0.9035240 12.765896</span><span class="w">
-</span><span class="c1">## [31] {Apple Croissant,                                                            </span><span class="w">
-</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Danish}        0.02184629  0.9085614 12.906019</span><span class="w">
-</span><span class="c1">## [32] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02184629  0.9075044 12.822135</span><span class="w">
-</span><span class="c1">## [33] {Apple Croissant,                                                            </span><span class="w">
-</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02181828  0.9073966 12.851126</span><span class="w">
-</span><span class="c1">## [34] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Cookie}        0.02181828  0.8974654 12.718042</span><span class="w">
-</span><span class="c1">## [35] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie,                                                           </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02179028  0.9948849 14.056736</span><span class="w">
-</span><span class="c1">## [36] {Apple Danish,                                                               </span><span class="w">
-</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02177627  0.8962536 12.693312</span><span class="w">
-</span><span class="c1">## [37] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02177627  0.9980745 14.222810</span><span class="w">
-</span><span class="c1">## [38] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02177627  0.9980745 14.101801</span><span class="w">
-</span><span class="c1">## [39] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02177627  0.9904459 13.994016</span><span class="w">
-</span><span class="c1">## [40] {Green Tea,                                                                  </span><span class="w">
-</span><span class="c1">##       Lemon Cookie,                                                               </span><span class="w">
-</span><span class="c1">##       Raspberry Cookie,                                                           </span><span class="w">
-</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02177627  1.0000000 14.129007</span><span class="w">
-</span><span class="c1">## [41] {Apple Croissant,                                                            </span><span class="w">
-</span><span class="c1">##       Apple Danish,                                                               </span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##      lhs                     rhs                      support confidence      lift
+</span><span class="w">
+</span><span class="c1">## [1]  {Apricot Danish}     =&gt; {Cherry Tart}         0.05576406  0.5788632  5.976788
+</span><span class="w">
+</span><span class="c1">## [2]  {Marzipan Cookie}    =&gt; {Tuile Cookie}        0.05348140  0.5723063  5.529326
+</span><span class="w">
+</span><span class="c1">## [3]  {Chocolate Coffee}   =&gt; {Chocolate Cake}      0.04625532  0.5343796  6.148723
+</span><span class="w">
+</span><span class="c1">## [4]  {Truffle Cake}       =&gt; {Gongolais Cookie}    0.04612929  0.5397346  5.808797
+</span><span class="w">
+</span><span class="c1">## [5]  {Blueberry Tart}     =&gt; {Apricot Croissant}   0.04569516  0.5291065  6.049062
+</span><span class="w">
+</span><span class="c1">## [6]  {Opera Cake}         =&gt; {Cherry Tart}         0.04555512  0.5331039  5.504321
+</span><span class="w">
+</span><span class="c1">## [7]  {Napoleon Cake}      =&gt; {Strawberry Cake}     0.04531705  0.5274654  5.547164
+</span><span class="w">
+</span><span class="c1">## [8]  {Cheese Croissant}   =&gt; {Orange Juice}        0.04523303  0.5294214  5.612370
+</span><span class="w">
+</span><span class="c1">## [9]  {Opera Cake}         =&gt; {Apricot Danish}      0.04519102  0.5288430  5.489696
+</span><span class="w">
+</span><span class="c1">## [10] {Apricot Danish,                                                             
+</span><span class="w">
+</span><span class="c1">##       Opera Cake}         =&gt; {Cherry Tart}         0.04317443  0.9553765  9.864304
+</span><span class="w">
+</span><span class="c1">## [11] {Bottled Water}      =&gt; {Berry Tart}          0.03970143  0.5090681  5.828368
+</span><span class="w">
+</span><span class="c1">## [12] {Almond Twist,                                                               
+</span><span class="w">
+</span><span class="c1">##       Apple Pie}          =&gt; {Coffee Eclair}       0.03604638  0.9356598  8.208058
+</span><span class="w">
+</span><span class="c1">## [13] {Casino Cake,                                                                
+</span><span class="w">
+</span><span class="c1">##       Chocolate Coffee}   =&gt; {Chocolate Cake}      0.03506610  0.9474082 10.901149
+</span><span class="w">
+</span><span class="c1">## [14] {Apricot Croissant,                                                          
+</span><span class="w">
+</span><span class="c1">##       Blueberry Tart}     =&gt; {Hot Coffee}          0.03447793  0.7545204  7.058665
+</span><span class="w">
+</span><span class="c1">## [15] {Almond Twist,                                                               
+</span><span class="w">
+</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02953451  0.9094437  7.978078
+</span><span class="w">
+</span><span class="c1">## [16] {Apple Pie,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02950650  0.9054577  7.943111
+</span><span class="w">
+</span><span class="c1">## [17] {Almond Twist,                                                               
+</span><span class="w">
+</span><span class="c1">##       Apple Pie}          =&gt; {Hot Coffee}          0.02946449  0.7648128  7.154952
+</span><span class="w">
+</span><span class="c1">## [18] {Almond Twist,                                                               
+</span><span class="w">
+</span><span class="c1">##       Apple Pie,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Hot Coffee}         =&gt; {Coffee Eclair}       0.02932445  0.9952471  8.730787
+</span><span class="w">
+</span><span class="c1">## [19] {Blackberry Tart,                                                            
+</span><span class="w">
+</span><span class="c1">##       Single Espresso}    =&gt; {Coffee Eclair}       0.02856823  0.9230769  8.097675
+</span><span class="w">
+</span><span class="c1">## [20] {Chocolate Tart,                                                             
+</span><span class="w">
+</span><span class="c1">##       Walnut Cookie}      =&gt; {Vanilla Frappuccino} 0.02810609  0.9369748 11.646213
+</span><span class="w">
+</span><span class="c1">## [21] {Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02705579  0.9257307 13.079655
+</span><span class="w">
+</span><span class="c1">## [22] {Raspberry Cookie,                                                           
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02704179  0.9288119 13.123190
+</span><span class="w">
+</span><span class="c1">## [23] {Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02697177  0.9228558 13.150925
+</span><span class="w">
+</span><span class="c1">## [24] {Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02691575  0.9209391 13.011955
+</span><span class="w">
+</span><span class="c1">## [25] {Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie,                                                           
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02684573  0.9953271 14.062983
+</span><span class="w">
+</span><span class="c1">## [26] {Apple Croissant,                                                            
+</span><span class="w">
+</span><span class="c1">##       Apple Danish}       =&gt; {Apple Tart}          0.02678972  0.9144359 12.950822
+</span><span class="w">
+</span><span class="c1">## [27] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie}       =&gt; {Raspberry Lemonade}  0.02198633  0.9069902 12.924836
+</span><span class="w">
+</span><span class="c1">## [28] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02191631  0.9014977 12.737267
+</span><span class="w">
+</span><span class="c1">## [29] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02190231  0.9009217 12.838358
+</span><span class="w">
+</span><span class="c1">## [30] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie}       =&gt; {Lemon Lemonade}      0.02190231  0.9035240 12.765896
+</span><span class="w">
+</span><span class="c1">## [31] {Apple Croissant,                                                            
+</span><span class="w">
+</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Danish}        0.02184629  0.9085614 12.906019
+</span><span class="w">
+</span><span class="c1">## [32] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02184629  0.9075044 12.822135
+</span><span class="w">
+</span><span class="c1">## [33] {Apple Croissant,                                                            
+</span><span class="w">
+</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02181828  0.9073966 12.851126
+</span><span class="w">
+</span><span class="c1">## [34] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Cookie}        0.02181828  0.8974654 12.718042
+</span><span class="w">
+</span><span class="c1">## [35] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie,                                                           
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02179028  0.9948849 14.056736
+</span><span class="w">
+</span><span class="c1">## [36] {Apple Danish,                                                               
+</span><span class="w">
+</span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02177627  0.8962536 12.693312
+</span><span class="w">
+</span><span class="c1">## [37] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Raspberry Lemonade}  0.02177627  0.9980745 14.222810
+</span><span class="w">
+</span><span class="c1">## [38] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie}   =&gt; {Lemon Lemonade}      0.02177627  0.9980745 14.101801
+</span><span class="w">
+</span><span class="c1">## [39] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02177627  0.9904459 13.994016
+</span><span class="w">
+</span><span class="c1">## [40] {Green Tea,                                                                  
+</span><span class="w">
+</span><span class="c1">##       Lemon Cookie,                                                               
+</span><span class="w">
+</span><span class="c1">##       Raspberry Cookie,                                                           
+</span><span class="w">
+</span><span class="c1">##       Raspberry Lemonade} =&gt; {Lemon Lemonade}      0.02177627  1.0000000 14.129007
+</span><span class="w">
+</span><span class="c1">## [41] {Apple Croissant,                                                            
+</span><span class="w">
+</span><span class="c1">##       Apple Danish,                                                               
+</span><span class="w">
 </span><span class="c1">##       Cherry Soda}        =&gt; {Apple Tart}          0.02162223  0.9897436 14.017376</span></code></pre></figure>
 
 <p>Let us take rule 1, rule 2 and rule 3 because their support level is the highest and rule 1 and 2 have an acceptable level of high confidence (&gt;0.55). We chose the 3 rules with the highest support levels because we want the items that many people are buying.</p>
@@ -865,46 +1341,61 @@ ga('send', 'pageview');
 <p>Let us explore on how many items should the manager bundle together for the rule if he were to bundle all 5 items together:</p>
 <p>{Green Tea, Lemon Cookie, Raspberry Cookie, Raspberry Lemonade} =&gt; {Lemon Lemonade}</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Reading in the binary vector receipt file</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Reading in the binary vector receipt file
+</span><span class="w">
 </span><span class="n">binaryVector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"75000-out2.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
 
-</span><span class="c1">#Removing the column for receipt ID</span><span class="w">
+</span><span class="c1">#Removing the column for receipt ID
+</span><span class="w">
 </span><span class="n">binaryVector</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">binaryVector</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="m">51</span><span class="p">]</span><span class="w">
 
-</span><span class="c1">#Changing the column names to their respective food names</span><span class="w">
+</span><span class="c1">#Changing the column names to their respective food names
+</span><span class="w">
 </span><span class="n">colnames</span><span class="p">(</span><span class="n">binaryVector</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">food</span><span class="o">$</span><span class="n">FoodName</span><span class="w">
 
-</span><span class="c1">#Reading in the file which has data on the amount of items purchased for the item based on the receipt</span><span class="w">
+</span><span class="c1">#Reading in the file which has data on the amount of items purchased for the item based on the receipt
+</span><span class="w">
 </span><span class="n">purchases</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"75000i.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">col.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"ReceiptID"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Amount"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Food"</span><span class="p">))</span><span class="w">
 
-</span><span class="c1">#Removing the unnecessary receipts by their ReceiptID</span><span class="w">
+</span><span class="c1">#Removing the unnecessary receipts by their ReceiptID
+</span><span class="w">
 </span><span class="n">removedReceipts.num</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">which</span><span class="p">(</span><span class="n">removedReceipts</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
 </span><span class="n">purchases</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">purchases</span><span class="p">[</span><span class="o">!</span><span class="p">(</span><span class="n">purchases</span><span class="o">$</span><span class="n">ReceiptID</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">removedReceipts.num</span><span class="p">),</span><span class="w"> </span><span class="p">]</span><span class="w">
 </span><span class="n">purchases</span><span class="o">$</span><span class="n">Food</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">food</span><span class="o">$</span><span class="n">FoodName</span><span class="p">[</span><span class="n">match</span><span class="p">(</span><span class="n">purchases</span><span class="o">$</span><span class="n">Food</span><span class="p">,</span><span class="w"> </span><span class="n">food</span><span class="o">$</span><span class="n">FoodId</span><span class="p">)]</span><span class="w">
 
-</span><span class="c1">#Seeing which receipts contains all the items we are interested in</span><span class="w">
+</span><span class="c1">#Seeing which receipts contains all the items we are interested in
+</span><span class="w">
 </span><span class="n">toCheck</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">which</span><span class="p">(</span><span class="n">binaryVector</span><span class="o">$</span><span class="n">`Lemon Lemonade`</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="n">binaryVector</span><span class="o">$</span><span class="n">`Raspberry Lemonade`</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="n">binaryVector</span><span class="o">$</span><span class="n">`Lemon Cookie`</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="n">binaryVector</span><span class="o">$</span><span class="n">`Raspberry Cookie`</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="n">binaryVector</span><span class="o">$</span><span class="n">`Green Tea`</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w">
 
-</span><span class="c1">#Filtering out the receipts based on the receipt ID and only for the food we want to check</span><span class="w">
+</span><span class="c1">#Filtering out the receipts based on the receipt ID and only for the food we want to check
+</span><span class="w">
 </span><span class="n">receiptsToCheck</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">purchases</span><span class="p">[(</span><span class="n">purchases</span><span class="o">$</span><span class="n">ReceiptID</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">toCheck</span><span class="p">),</span><span class="w"> </span><span class="p">]</span><span class="w">
 </span><span class="n">receiptsToCheck</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">receiptsToCheck</span><span class="p">[</span><span class="n">receiptsToCheck</span><span class="o">$</span><span class="n">Food</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Lemon Lemonade"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Raspberry Lemonade"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Lemon Cookie"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Raspberry Cookie"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Green Tea"</span><span class="p">),</span><span class="w"> </span><span class="p">]</span><span class="w">
 </span><span class="n">receiptsToCheck</span><span class="o">$</span><span class="n">Food</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.factor</span><span class="p">(</span><span class="n">receiptsToCheck</span><span class="o">$</span><span class="n">Food</span><span class="p">)</span><span class="w">
 </span><span class="n">head</span><span class="p">(</span><span class="n">receiptsToCheck</span><span class="p">)</span></code></pre></figure>
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##     ReceiptID Amount               Food</span><span class="w">
-</span><span class="c1">## 76         23      4   Raspberry Cookie</span><span class="w">
-</span><span class="c1">## 77         23      1       Lemon Cookie</span><span class="w">
-</span><span class="c1">## 78         23      1     Lemon Lemonade</span><span class="w">
-</span><span class="c1">## 79         23      5 Raspberry Lemonade</span><span class="w">
-</span><span class="c1">## 80         23      3          Green Tea</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">##     ReceiptID Amount               Food
+</span><span class="w">
+</span><span class="c1">## 76         23      4   Raspberry Cookie
+</span><span class="w">
+</span><span class="c1">## 77         23      1       Lemon Cookie
+</span><span class="w">
+</span><span class="c1">## 78         23      1     Lemon Lemonade
+</span><span class="w">
+</span><span class="c1">## 79         23      5 Raspberry Lemonade
+</span><span class="w">
+</span><span class="c1">## 80         23      3          Green Tea
+</span><span class="w">
 </span><span class="c1">## 188        55      2   Raspberry Cookie</span></code></pre></figure>
 
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Data frame which has the amount of item purchased by item name</span><span class="w">
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#Data frame which has the amount of item purchased by item name
+</span><span class="w">
 </span><span class="n">dfToCheck</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">receiptsToCheck</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">Food</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="n">summarise</span><span class="p">(</span><span class="n">Frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">Amount</span><span class="p">)))</span><span class="w">
 
-</span><span class="c1">#Get the mean number of items purchased in a receipt</span><span class="w">
+</span><span class="c1">#Get the mean number of items purchased in a receipt
+</span><span class="w">
 </span><span class="n">dfToCheck</span><span class="o">$</span><span class="n">Mean</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dfToCheck</span><span class="o">$</span><span class="n">Frequency</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">unique</span><span class="p">(</span><span class="n">receiptsToCheck</span><span class="o">$</span><span class="n">ReceiptID</span><span class="p">))</span><span class="w">
 
 </span><span class="n">ggplotly</span><span class="p">(</span><span class="n">ggplot</span><span class="p">(</span><span class="n">dfToCheck</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Food</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">Mean</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="n">Food</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_bar</span><span class="p">(</span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"identity"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Average number of items purchased per receipt"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_text</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="nf">round</span><span class="p">(</span><span class="n">Mean</span><span class="p">,</span><span class="m">2</span><span class="p">))))</span></code></pre></figure>
@@ -974,7 +1465,7 @@ $(document).ready(function () {
 
 <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2020 Tiew Kee Hui Powered by <a href="http://jekyllrb.com">Jekyll</a></p>
+      <p class="copy">&copy; 2021 Tiew Kee Hui Powered by <a href="http://jekyllrb.com">Jekyll</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
